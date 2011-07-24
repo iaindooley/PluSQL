@@ -21,11 +21,19 @@
         {
             if($this->primary_keys === NULL)
             {
-                if(!$query = mysql_query('DESCRIBE '.$this->table_name,$this->link))
+                $describe_sql = 'DESCRIBE '.$this->table_name;
+                
+                if($this->link instanceof mysqli)
+                    $query = $this->link->query($describe_sql);
+                else
+                    $query = mysql_query($describe_sql,$this->link);
+
+                if(!$query)
                     throw new TableInspectorException('It looks like: '.$this->table_name.' doesn\'t exist');
+
                 $this->primary_keys = array();
     
-                while($row = mysql_fetch_assoc($query))
+                while($row = self::queryRow($query))
                 {
                     if($row['Key'] == 'PRI')
                         $this->primary_keys[] = $row['Field'];
@@ -33,6 +41,16 @@
             }
             
             return $this->primary_keys;
+        }
+        
+        public static function queryRow($query)
+        {
+            if($query instanceof mysqli_result)
+                $ret = $query->fetch_assoc();
+            else
+                $ret = mysql_fetch_assoc($query);
+            
+            return $ret;
         }
     }
 

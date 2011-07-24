@@ -6,10 +6,23 @@
         
         public function __construct($sql,$link)
         {
-            if(!$this->query = mysql_query($sql,$link))
-                throw new SqlErrorException(mysql_error());
+            if($link instanceof mysqli)
+                $query = $link->query($sql);
+            else
+                $query = mysql_query($sql,$link);
 
-            $this->link = $link;
+            if(!$query)
+            {
+                if($link instanceof mysqli)
+                    $error = $link->error;
+                else
+                    $error = mysql_error();
+
+                throw new SqlErrorException($error);
+            }
+
+            $this->query = $query;
+            $this->link  = $link;
         }
         
         public function __get($name)
@@ -19,18 +32,39 @@
         
         public function nextRow()
         {
-            return mysql_fetch_assoc($this->query);
+            if($this->link instanceof mysqli)
+                $row = $this->query->fetch_assoc();
+            else
+                $row = mysql_fetch_assoc($this->query);
+
+            return $row;
         }
         
         public function rowAtIndex($index)
         {
-            if(!mysql_num_rows($this->query))
+            if($this->link instanceof mysqli)
+                $num_rows = $this->query->num_rows;
+            else
+                $num_rows = mysql_num_rows($this->query);
+
+            if(!$num_rows)
                 throw new EmptySetException('You have passed me a query that returns no information');
-            if(mysql_num_rows($this->query) <= $index)
+            if($num_rows <= $index)
                 throw new InvalidAnormQueryRowException('Out of range');
 
-            mysql_data_seek($this->query,$index);
-            return mysql_fetch_assoc($this->query);
+            if($this->link instanceof mysqli)
+            {
+                $this->query->data_seek($index);
+                $ret = $this->query->fetch_assoc();
+            }
+
+            else
+            {
+                mysql_data_seek($this->query,$index);
+                $ret = mysql_fetch_assoc($this->query);
+            }
+
+            return $ret;
         }
         
         public function link()
