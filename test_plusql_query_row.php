@@ -4,7 +4,7 @@
     require_once('plusql_query_iterator.class.php');
     require_once('table_inspector.class.php');
     require_once('table_inspector_worker.class.php');
-    $link = mysql_connect('localhost','root','++WEREWOLFbatMITZVAH++');
+    $link = mysql_connect('localhost','root','ROOTPASS');
     mysql_select_db('plusql');
     $query = new PlusqlQuery('SELECT * FROM author',$link);
     $row = new PlusqlQueryRow($query,'author',$query->nextRow());

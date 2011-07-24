@@ -1,2 +1,2 @@
 <?php
-    mysql_connect('localhost','root','++WEREWOLFbatMITZVAH++');
+    mysql_connect('localhost','root','ROOTPASS');
