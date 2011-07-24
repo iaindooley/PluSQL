@@ -39,8 +39,7 @@ pattern and implement it in other languages.
 TO RUN THE TESTS:
 
 mysql -u root -pROOTPASS < anorm.sql
-sed -i "s/ROOTPASS/YOUR ACTUAL ROOT MYSQL PASS/g" connect.php
-sed -i "s/ROOTPASS/YOUR ACTUAL ROOT MYSQL PASS/g" test.php
+sed -i "s/ROOTPASS/YOUR ACTUAL ROOT MYSQL PASS/g" *.php
 
 php fixture.php 	#creates all your test data
 
