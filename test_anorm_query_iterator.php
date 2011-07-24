@@ -1,10 +1,10 @@
 <?php
-    require_once('query_iterator.class.php');
-    require_once('query.class.php');
-    require_once('query_row.class.php');
+    require_once('anorm_query_iterator.class.php');
+    require_once('anorm_query.class.php');
+    require_once('anorm_query_row.class.php');
     require_once('table_inspector.class.php');
     require_once('table_inspector_worker.class.php');
-    $link = mysql_connect('localhost','root','++WEREWOLFbatMITZVAH++');
+    $link = mysql_connect('localhost','root','ROOTPASS');
     mysql_select_db('anorm');
     $query = new AnormQuery('SELECT * FROM book',$link);
     $iterator = new AnormQueryIterator($query,'book');
