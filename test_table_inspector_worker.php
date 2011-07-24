@@ -1,6 +1,6 @@
 <?php
     require_once('table_inspector_worker.class.php');
-    $link = mysql_connect('localhost','root','ROOTPASS');
+    $link = mysql_connect(DBHOST,DBUSER,DBPASS);
     mysql_select_db('plusql');
     $worker = new TableInspectorWorker('author',$link);
     print_r($worker->primaryKeys());

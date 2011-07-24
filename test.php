@@ -1,5 +1,6 @@
 <?php
     $start = microtime(true);
+    require_once('dbconfig.php');
     require_once('plusql.class.php');
     require_once('connection.class.php');
     require_once('plusql_query.class.php');
@@ -7,8 +8,8 @@
     require_once('plusql_query_row.class.php');
     require_once('table_inspector.class.php');
     require_once('table_inspector_worker.class.php');
-    Plusql::credentials('live',array('localhost','root','ROOTPASS','plusql'));
-    Plusql::credentials('dev',array('localhost','root','ROOTPASS','plusql_dev'));
+    Plusql::credentials('live',array(DBHOST,DBUSER,DBPASS,'plusql'));
+    Plusql::credentials('dev',array(DBHOST,DBUSER,DBPASS,'plusql_dev'));
 
     printEverything();
     die('took: '.(microtime(true) - $start).' and used: '.memory_get_peak_usage(true)/1024/1024);

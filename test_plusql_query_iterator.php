@@ -1,10 +1,11 @@
 <?php
+    require('dbconfig.php');
     require_once('plusql_query_iterator.class.php');
     require_once('plusql_query.class.php');
     require_once('plusql_query_row.class.php');
     require_once('table_inspector.class.php');
     require_once('table_inspector_worker.class.php');
-    $link = mysql_connect('localhost','root','ROOTPASS');
+    $link = mysql_connect(DBHOST,DBUSER,DBPASS);
     mysql_select_db('plusql');
     $query = new PlusqlQuery('SELECT * FROM book',$link);
     $iterator = new PlusqlQueryIterator($query,'book');

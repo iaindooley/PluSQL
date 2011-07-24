@@ -1,2 +1,3 @@
 <?php
-    mysql_connect('localhost','root','ROOTPASS');
+    require('dbconfig.php');
+    mysql_connect(DBHOST,DBUSER,DBPASS);

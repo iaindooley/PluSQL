@@ -39,7 +39,7 @@ pattern and implement it in other languages.
 TO RUN THE TESTS:
 
 mysql -u root -pROOTPASS < plusql.sql
-sed -i "s/ROOTPASS/YOUR ACTUAL ROOT MYSQL PASS/g" *.php
+sed -i "s/ROOTPASS/YOUR ACTUAL ROOT MYSQL PASS/g" dbconfig.php
 
 php fixture.php 	#creates all your test data
 
