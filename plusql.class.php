@@ -66,6 +66,11 @@
             if(count(self::$instance->stack) == 1)
                 self::$instance->stack[] = $last;
         }
+        
+        public function from()
+        {
+            return new PlusqlSelect();
+        }
     }
 
     class PlusqlConnectionException extends Exception {}
