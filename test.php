@@ -1,14 +1,14 @@
 <?php
     $start = microtime(true);
-    require_once('anorm.class.php');
+    require_once('plusql.class.php');
     require_once('connection.class.php');
-    require_once('anorm_query.class.php');
-    require_once('anorm_query_iterator.class.php');
-    require_once('anorm_query_row.class.php');
+    require_once('plusql_query.class.php');
+    require_once('plusql_query_iterator.class.php');
+    require_once('plusql_query_row.class.php');
     require_once('table_inspector.class.php');
     require_once('table_inspector_worker.class.php');
-    Anorm::credentials('live',array('localhost','root','ROOTPASS','anorm'));
-    Anorm::credentials('dev',array('localhost','root','ROOTPASS','anorm_dev'));
+    Plusql::credentials('live',array('localhost','root','++WEREWOLFbatMITZVAH++','plusql'));
+    Plusql::credentials('dev',array('localhost','root','++WEREWOLFbatMITZVAH++','plusql_dev'));
 
     printEverything();
     die('took: '.(microtime(true) - $start).' and used: '.memory_get_peak_usage(true)/1024/1024);
@@ -22,7 +22,7 @@
                                      ORDER BY author_id,book_id,reader_id
                                      LIMIT 10000';
 
-        foreach(Anorm::begin('live')->query($sql)->author as $auth)
+        foreach(Plusql::begin('live')->query($sql)->author as $auth)
         {
             echo $auth->author_first_name.' '.$auth->author_last_name.' wrote: '.PHP_EOL;
             
@@ -37,7 +37,7 @@
         }
         
         authorNames();
-        Anorm::end();
+        Plusql::end();
     }
     
     function authorNames()
@@ -47,16 +47,16 @@
                                      INNER JOIN reader_reviews_book USING(author_id,book_id)
                                      INNER JOIN reader USING(reader_id)
                                      ORDER BY author_id,book_id,reader_id';
-        foreach(Anorm::begin('dev')->query($sql)->author as $auth)
+        foreach(Plusql::begin('dev')->query($sql)->author as $auth)
             echo $auth->author_first_name.' '.$auth->author_last_name.PHP_EOL;
         
         justBookOne();
-        Anorm::end();
+        Plusql::end();
     }
     
     function justBookOne()
     {
-        $book = Anorm::begin('live')->query('SELECT * FROM book INNER JOIN author USING(author_id) WHERE book_id = 1')->book;
+        $book = Plusql::begin('live')->query('SELECT * FROM book INNER JOIN author USING(author_id) WHERE book_id = 1')->book;
         echo $book->title.' by: '.$book->author->author_first_name.' '.$book->author->author_last_name.PHP_EOL;
-        Anorm::end();
+        Plusql::end();
     }

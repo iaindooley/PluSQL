@@ -1,7 +1,7 @@
 <?php
     require_once('table_inspector_worker.class.php');
-    $link = mysql_connect('localhost','root','ROOTPASS');
-    mysql_select_db('anorm');
+    $link = mysql_connect('localhost','root','++WEREWOLFbatMITZVAH++');
+    mysql_select_db('plusql');
     $worker = new TableInspectorWorker('author',$link);
     print_r($worker->primaryKeys());
     $worker = new TableInspectorWorker('book',$link);

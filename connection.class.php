@@ -17,13 +17,13 @@
         public function connect()
         {
             if($this->link instanceof mysqli)
-                $this->link->select_db($this->credentials[Anorm::NAME]) or die($this->link->error);
+                $this->link->select_db($this->credentials[Plusql::NAME]) or die($this->link->error);
             else
-                mysql_select_db($this->credentials[Anorm::NAME],$this->link) or die(mysql_error());
+                mysql_select_db($this->credentials[Plusql::NAME],$this->link) or die(mysql_error());
         }
         
         public function query($sql)
         {
-            return new AnormQuery($sql,$this->link);
+            return new PlusqlQuery($sql,$this->link);
         }
     }

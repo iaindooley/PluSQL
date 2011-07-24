@@ -1,6 +1,6 @@
 <?php
     require('connect.php');
-    mysql_select_db('anorm');
+    mysql_select_db('plusql');
     mysql_query('TRUNCATE author') or die(mysql_error());
     mysql_query('TRUNCATE book') or die(mysql_error());
     mysql_query('TRUNCATE reader') or die(mysql_error());
@@ -55,7 +55,7 @@
         return 2;
     }
 
-    mysql_select_db('anorm_dev');
+    mysql_select_db('plusql_dev');
     mysql_query('TRUNCATE author') or die(mysql_error());
     mysql_query('TRUNCATE book') or die(mysql_error());
     mysql_query('TRUNCATE reader') or die(mysql_error());

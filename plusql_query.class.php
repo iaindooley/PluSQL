@@ -1,5 +1,5 @@
 <?php
-    class AnormQuery
+    class PlusqlQuery
     {
         private $query;
         private $link;
@@ -27,7 +27,7 @@
         
         public function __get($name)
         {
-            return new AnormQueryIterator($this,$name);
+            return new PlusqlQueryIterator($this,$name);
         }
         
         public function nextRow()
@@ -50,7 +50,7 @@
             if(!$num_rows)
                 throw new EmptySetException('You have passed me a query that returns no information');
             if($num_rows <= $index)
-                throw new InvalidAnormQueryRowException('Out of range');
+                throw new InvalidPlusqlQueryRowException('Out of range');
 
             if($this->link instanceof mysqli)
             {

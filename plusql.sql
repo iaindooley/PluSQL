@@ -1,9 +1,9 @@
-DROP DATABASE IF EXISTS anorm;
-CREATE DATABASE anorm;
-DROP DATABASE IF EXISTS anorm_dev;
-CREATE DATABASE anorm_dev;
+DROP DATABASE IF EXISTS plusql;
+CREATE DATABASE plusql;
+DROP DATABASE IF EXISTS plusql_dev;
+CREATE DATABASE plusql_dev;
 
-USE anorm
+USE plusql
 DROP TABLE IF EXISTS author;
 CREATE TABLE `author` (
   `author_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -47,7 +47,7 @@ CREATE TABLE `book_type` (
   PRIMARY KEY (`book_type_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-USE anorm_dev
+USE plusql_dev
 DROP TABLE IF EXISTS author;
 CREATE TABLE `author` (
   `author_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,

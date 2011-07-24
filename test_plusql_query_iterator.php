@@ -1,13 +1,13 @@
 <?php
-    require_once('anorm_query_iterator.class.php');
-    require_once('anorm_query.class.php');
-    require_once('anorm_query_row.class.php');
+    require_once('plusql_query_iterator.class.php');
+    require_once('plusql_query.class.php');
+    require_once('plusql_query_row.class.php');
     require_once('table_inspector.class.php');
     require_once('table_inspector_worker.class.php');
-    $link = new mysqli('localhost','root','ROOTPASS');
-    $link->select_db('anorm');
-    $query = new AnormQuery('SELECT * FROM book',$link);
-    $iterator = new AnormQueryIterator($query,'book');
+    $link = mysql_connect('localhost','root','++WEREWOLFbatMITZVAH++');
+    mysql_select_db('plusql');
+    $query = new PlusqlQuery('SELECT * FROM book',$link);
+    $iterator = new PlusqlQueryIterator($query,'book');
     
     echo 'the current row is: '.$iterator->current()->title.PHP_EOL;
     echo 'the next row is: '.$iterator->next()->title.PHP_EOL;
@@ -41,7 +41,7 @@
         echo 'the author is: '.$author->author_first_name.PHP_EOL;
     }
     
-    catch(InvalidAnormQueryRowException $exc)
+    catch(InvalidPlusqlQueryRowException $exc)
     {
         echo 'naturally, we can\'t query author information - there\'s no author table in the query'.PHP_EOL;
     }
@@ -53,23 +53,23 @@
         echo 'why the hell are we able to tell the author\'s name though: '.$author->author_first_name.PHP_EOL;
     }
     
-    catch(InvalidAnormQueryRowException $exc)
+    catch(InvalidPlusqlQueryRowException $exc)
     {
         echo 'we quite rightly cannot tell the author\'s name though'.PHP_EOL;
     }
     
     echo 'now with a different query we can loop through by book and print the author\'s name'.PHP_EOL;
     
-    $query = new AnormQuery('SELECT * FROM book INNER JOIN author USING(author_id) ORDER BY book_id',$link);
-    $book = new AnormQueryIterator($query,'book');
+    $query = new PlusqlQuery('SELECT * FROM book INNER JOIN author USING(author_id) ORDER BY book_id',$link);
+    $book = new PlusqlQueryIterator($query,'book');
 
     foreach($book as $b)
         echo $b->title.' was written by '.$b->author->author_first_name.' '.$b->author->author_last_name.PHP_EOL;
 
     echo 'and now we can loop through by author and print a list of books'.PHP_EOL;
 
-    $query = new AnormQuery('SELECT * FROM author INNER JOIN book USING(author_id) INNER JOIN book_type USING(book_type_id) ORDER BY author_id,book_id',$link);
-    $author = new AnormQueryIterator($query,'author');
+    $query = new PlusqlQuery('SELECT * FROM author INNER JOIN book USING(author_id) INNER JOIN book_type USING(book_type_id) ORDER BY author_id,book_id',$link);
+    $author = new PlusqlQueryIterator($query,'author');
 
     foreach($author as $auth)
     {

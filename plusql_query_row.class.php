@@ -1,5 +1,5 @@
 <?php
-    class AnormQueryRow
+    class PlusqlQueryRow
     {
         private $query;
         private $table;
@@ -14,7 +14,7 @@
             $this->data = $this->query->rowAtIndex($this->index);
 
             if(!is_array($this->data))
-                throw new InvalidAnormQueryRowException('You have tried to create a AnormQueryRow object with an empty data set for: '.$table);
+                throw new InvalidPlusqlQueryRowException('You have tried to create a PlusqlQueryRow object with an empty data set for: '.$table);
         }
         
         public function keySignature()
@@ -31,7 +31,7 @@
                 else if(array_key_exists($table_key_name,$this->data))
                     $sig[] = $this->data[$table_key_name];
                 else
-                        throw new InvalidAnormQueryRowException('You can\'t get a key signature for: '.$this->table_inspector->name().' from row: '.implode('::',array_keys($this->data)).' because: '.$key_name.' is not present');
+                        throw new InvalidPlusqlQueryRowException('You can\'t get a key signature for: '.$this->table_inspector->name().' from row: '.implode('::',array_keys($this->data)).' because: '.$key_name.' is not present');
 
             }
             
@@ -50,7 +50,7 @@
             {
                 try
                 {
-                    $ret = new AnormQueryIterator($this->query,$name,$this->index);
+                    $ret = new PlusqlQueryIterator($this->query,$name,$this->index);
                     $pairs = array();
                     
                     foreach($this->table_inspector->primaryKeys() as $name)
@@ -71,7 +71,7 @@
                 
                 catch(TableInspectorException $exc)
                 {
-                    throw new InvalidAnormQueryRowException('You tried to get the attribute: '.$name.' from a query row for the table: '.$this->table_inspector->name().' but this is neither a valid column nor a valid table in the database (so I can\'t return a new iterator either)');
+                    throw new InvalidPlusqlQueryRowException('You tried to get the attribute: '.$name.' from a query row for the table: '.$this->table_inspector->name().' but this is neither a valid column nor a valid table in the database (so I can\'t return a new iterator either)');
                 }
             }
             
@@ -79,4 +79,4 @@
         }
     }
 
-    class InvalidAnormQueryRowException extends Exception {}
+    class InvalidPlusqlQueryRowException extends Exception {}

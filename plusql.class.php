@@ -1,5 +1,5 @@
 <?php
-    class Anorm
+    class Plusql
     {
         private static $instance = NULL;
         private $connections;
@@ -20,10 +20,10 @@
         public static function credentials($name,$details)
         {
             if(count($details) != 4)
-                throw new InvalidCredentialsException('You need to pass in a 4 element array of credentials: host, username, password and database name to Anorm::credentials()');
+                throw new InvalidCredentialsException('You need to pass in a 4 element array of credentials: host, username, password and database name to Plusql::credentials()');
             
             if(self::$instance === NULL)
-                self::$instance = new Anorm();
+                self::$instance = new Plusql();
             
             self::$instance->credentials[$name] = $details;
         }
@@ -31,10 +31,10 @@
         public static function begin($credentials)
         {
             if(self::$instance === NULL)
-                self::$instance = new Anorm();
+                self::$instance = new Plusql();
             
             if(!isset(self::$instance->credentials[$credentials]))
-                throw new InvalidCredentialsException('Unable to begin Anorm session with credentials named: '.$credentials.' (cos they don\'t exist)');
+                throw new InvalidCredentialsException('Unable to begin Plusql session with credentials named: '.$credentials.' (cos they don\'t exist)');
 
             $host = self::$instance->credentials[$credentials][0];
             $user = self::$instance->credentials[$credentials][1];
@@ -59,7 +59,7 @@
         public function end()
         {
             if(self::$instance === NULL)
-                self::$instance = new Anorm();
+                self::$instance = new Plusql();
 
             $last = array_pop(self::$instance->stack);
             
@@ -68,6 +68,6 @@
         }
     }
 
-    class AnormConnectionException extends Exception {}
+    class PlusqlConnectionException extends Exception {}
     class EmptySetException extends Exception {}
     class InvalidCredentialsException extends Exception{}

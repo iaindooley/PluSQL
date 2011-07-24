@@ -2,7 +2,7 @@
 ******** WARNING **********************************************
 ******** WARNING **********************************************
 
-NB: Anorm is currently PRE-RELEASE - I intend to update
+NB: PluSQL is currently PRE-RELEASE - I intend to update
 it to use parametrized queries by default which may change
 the API. I'm making it available now only for preview purposes
 
@@ -11,12 +11,12 @@ the API. I'm making it available now only for preview purposes
 ******** WARNING **********************************************
 
 -----------------------------
-Anorm: The ORM for SQL lovers
+PluSQL: The ORM for SQL lovers
 
 by: iain@workingsoftware.com.au
 -----------------------------
 
-Anorm consists of two parts:
+Plusql consists of two parts:
 
  - the bit that reads a query
  - the bit that builds a query
@@ -31,14 +31,14 @@ The interface between these two bits is just SQL - meaning
 that we can start with just the query reading bit and move
 onto designing the most awesome query building bit ever.
 
-Anorm is implemented here using PHP, however it was so
+Plusql is implemented here using PHP, however it was so
 easy to build (only took me an hour to write the actual
 code) that I would encourage others to use a similar 
 pattern and implement it in other languages.
 
 TO RUN THE TESTS:
 
-mysql -u root -pROOTPASS < anorm.sql
+mysql -u root -pROOTPASS < plusql.sql
 sed -i "s/ROOTPASS/YOUR ACTUAL ROOT MYSQL PASS/g" *.php
 
 php fixture.php 	#creates all your test data
@@ -57,14 +57,14 @@ the primary keys for each type of table are read in from the database
 so each iterator object knows how to completely identify itself
 from any given row in the database.
 
-NB: Anorm is a 2 part system: it completely separates the "reading"
+NB: Plusql is a 2 part system: it completely separates the "reading"
 part of ORM from the query building.
 
 I have yet to implement the query builder but some ideas I have are
 to make it not "all or nothing" - ie. simplify the boring parts of
 query building but allow you to "mix n match" with hand written SQL.
 
-The beauty part is that because Anorm takes ANY SQL at all as input,
+The beauty part is that because Plusql takes ANY SQL at all as input,
 we can work on query building vs. query reading as completely separate problems.
 
 TODO (before launching):

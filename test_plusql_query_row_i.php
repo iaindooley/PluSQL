@@ -1,18 +1,18 @@
 <?php
-    require_once('anorm_query_row.class.php');
-    require_once('anorm_query.class.php');
-    require_once('anorm_query_iterator.class.php');
+    require_once('plusql_query_row.class.php');
+    require_once('plusql_query.class.php');
+    require_once('plusql_query_iterator.class.php');
     require_once('table_inspector.class.php');
     require_once('table_inspector_worker.class.php');
-    $link = new mysqli('localhost','root','ROOTPASS');
-    $link->select_db('anorm');
-    $query = new AnormQuery('SELECT * FROM author',$link);
-    $row = new AnormQueryRow($query,'author',0);
+    $link = new mysqli('localhost','root','++WEREWOLFbatMITZVAH++');
+    $link->select_db('plusql');
+    $query = new PlusqlQuery('SELECT * FROM author',$link);
+    $row = new PlusqlQueryRow($query,'author',0);
     echo 'sig: '.$row->keySignature().PHP_EOL;
     echo 'get: '.$row->author_first_name.PHP_EOL;
 
-    $query = new AnormQuery('SELECT * FROM book',$link);
-    $row = new AnormQueryRow($query,'book',0);
+    $query = new PlusqlQuery('SELECT * FROM book',$link);
+    $row = new PlusqlQueryRow($query,'book',0);
     echo 'sig: '.$row->keySignature().PHP_EOL;
     
     try
@@ -20,7 +20,7 @@
         echo 'get: '.$row->book_title.PHP_EOL;
     }
     
-    catch(InvalidAnormQueryRowException $exc)
+    catch(InvalidPlusqlQueryRowException $exc)
     {
         echo 'we quite rightly could not get book_title'.PHP_EOL;
     }

@@ -1,3 +1,3 @@
 #!/bin/sh
-mysql -u root -p$1 < anorm.sql
+mysql -u root -p$1 < plusql.sql
 php fixture.php
