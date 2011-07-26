@@ -14,6 +14,11 @@
                 $this->link = mysql_connect($host,$user,$password);
         }
         
+        public function link()
+        {
+            return $this->link;
+        }
+
         public function connect()
         {
             if($this->link instanceof mysqli)

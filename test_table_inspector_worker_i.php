@@ -1,4 +1,5 @@
 <?php
+    require('dbconfig.php');
     require_once('table_inspector_worker.class.php');
     $link = new mysqli(DBHOST,DBUSER,DBPASS);
     $link->select_db('plusql');

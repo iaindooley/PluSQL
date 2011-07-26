@@ -15,7 +15,7 @@
         {
             if(self::$instance === NULL)
                 self::$instance = new TableInspector($link);
-            
+
             if(!isset(self::$instance->workers[$table_name]))
                 self::$instance->workers[$table_name] = new TableInspectorWorker($table_name,self::$instance->link);
             

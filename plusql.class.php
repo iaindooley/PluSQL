@@ -67,9 +67,9 @@
                 self::$instance->stack[] = $last;
         }
         
-        public function from()
+        public function from($credentials)
         {
-            return new PlusqlSelect();
+            return new PlusqlSelect(self::begin($credentials));
         }
     }
 

@@ -3,13 +3,13 @@
     require_once('plusql.class.php');
     require_once('plusql_select.class.php');
     require_once('plusql_table.class.php');
-    $link = mysql_connect(DBHOST,DBUSER,DBPASS);
-    mysql_select_db('plusql');
-    
-    echo Plusql::from()->author
-                       ->book
-                       ->reader_reviews_book
-                       ->book
-                       ->book_type
-                       ->_();
-    ;
+    require_once('connection.class.php');
+    require_once('on_clause.class.php');
+    require_once('table_inspector.class.php');
+    require_once('table_inspector_worker.class.php');
+    Plusql::credentials('live',array(DBHOST,DBUSER,DBPASS,'plusql'));
+    echo Plusql::from('live')->author
+                             ->book
+                             ->reader('book')
+                             ->book_type
+                             ->_();

@@ -4,15 +4,25 @@
         private $tables;
         private $target;
         private $initial_table;
+        private $connection;
         
-        public function __construct()
+        public function __construct(Connection $connection)
         {
             $this->tables = array();
             $this->target = NULL;
             $this->initial_table = NULL;
+            $this->connection = $connection;
         }
         
-        public function __get($name)
+        public function __call($name,$args)
+        {
+            if(!count($args))
+                throw new InvalidReturnSelector('You have used a method call in your from clause without passing in the name of a table to return');
+
+            return $this->fromClause($name,$args[0]);
+        }
+        
+        private function fromClause($name,$return = NULL)
         {
             $previous = NULL;
 
@@ -27,13 +37,26 @@
                     $previous->joinTable($this->tables[$name]);
             }
             
-            $this->target = $this->tables[$name];
+            if(!$return)
+                $this->target = $this->tables[$name];
+            else
+            {
+                if(!isset($this->tables[$return]))
+                    throw new InvalidReturnSelectorException('You can\'t ask for '.$return.' in your from clause, because you haven\'t already accessed it');
+
+                $this->target = $this->tables[$return];
+            }
             
 
             if($this->initial_table === NULL)
                 $this->initial_table = $this->target;
 
             return $this;
+        }
+
+        public function __get($name)
+        {
+            return $this->fromClause($name);
         }
         
         public function _()
@@ -44,17 +67,30 @@
             while($t = array_pop($stack))
             {
                 if(!$clause)
-                    $clause = 'from '.$t->name().' ';
-                
-                foreach($t->joinTo() as $t)
+                    $clause  = 'from '.$t->name();
+
+                foreach($t->joinTo() as $t2)
                 {
-                    $clause .= $t->joinType().' '.$t->name().' ON ';
-                    //TODO: ON clause - automatically detect many-to-many joins
-                    $stack[] = $t;
+                    try
+                    {
+                        $on      = new OnClause($this->connection->link(),$t->name(),$t2->name());
+                        $onstring = $on->toString();
+                        $clause .= ' '.$t2->joinType().' '.$t2->name().' ON '.$onstring;
+                    }
+                    
+                    catch(ManyToManyJoinException $exc)
+                    {
+                        $left_on = new OnClause($this->connection->link(),$t->name(),$exc->joiningTable()->name());
+                        $right_on  = new OnClause($this->connection->link(),$exc->joiningTable()->name(),$t2->name());
+                        $clause  .= ' '.$t2->joinType().' '.$exc->joiningTable()->name().' ON '.$left_on->toString();
+                        $clause  .= ' '.$t2->joinType().' '.$t2->name().' ON '.$right_on->toString();
+                    }
+
+                    $stack[] = $t2;
                 }
             }
             
-            die($clause);
+            die($clause.PHP_EOL);
         }
         
         // default inner join, allow left call to override
