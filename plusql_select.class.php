@@ -58,7 +58,12 @@
 
         public function __get($name)
         {
-            return $this->fromClause($name);
+            if($name == '_')
+                $ret = $this->_();
+            else
+                $ret = $this->fromClause($name);
+            
+            return $ret;
         }
         
         public function _()
