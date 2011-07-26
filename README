@@ -85,3 +85,5 @@ TODO (before launching):
  * simplfying the process of including all relevant primary keys based on from clause
 
  * simplfying the default order clause by primary keys to create contiguous blocks
+
+ * You can use PlusqlSelect::__toString() magic method instead of terminating with ->_;
