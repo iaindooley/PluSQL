@@ -16,6 +16,16 @@
             $this->query_props = array();
         }
         
+        public function getProperty($name)
+        {
+            $ret = '';
+            
+            if(isset($this->query_props[$name]))
+                $ret = $this->query_props[$name];
+            
+            return $ret;
+        }
+
         public function __call($name,$args)
         {
             if(!count($args))
