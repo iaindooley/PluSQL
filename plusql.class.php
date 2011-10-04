@@ -3,7 +3,6 @@
     {
         private static $instance = NULL;
         private $connections;
-        private $stack;
         const HOST = 0;
         const USER = 1;
         const PASS = 2;
@@ -13,7 +12,6 @@
         private function __construct()
         {
             $this->connections = array();
-            $this->stack = array();
             $this->credentials = array();
         }
         
@@ -28,7 +26,7 @@
             self::$instance->credentials[$name] = $details;
         }
 
-        public static function begin($credentials)
+        public static function connect($credentials)
         {
             if(self::$instance === NULL)
                 self::$instance = new Plusql();
@@ -50,26 +48,13 @@
             else
                 $conn = self::$instance->connections[$key];
             
-            self::$instance->stack[] = $conn;
             $conn->connect();
-            
             return $conn;
-        }
-        
-        public function end()
-        {
-            if(self::$instance === NULL)
-                self::$instance = new Plusql();
-
-            $last = array_pop(self::$instance->stack);
-            
-            if(count(self::$instance->stack) == 1)
-                self::$instance->stack[] = $last;
         }
         
         public function from($credentials)
         {
-            return new PlusqlSelect(self::begin($credentials));
+            return new PlusqlSelect(self::connect($credentials));
         }
     }
 
