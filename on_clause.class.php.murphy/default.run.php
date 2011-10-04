@@ -1,7 +1,9 @@
 <?php
-    murphy\Test::add(function($runner)
+    namespace plusql;
+
+    \murphy\Test::add(function($runner)
     {
-        murphy\Fixture::load(dirname(__FILE__).'/fixture.php')->execute();
+        \murphy\Fixture::load(dirname(__FILE__).'/fixture.php')->execute();
         $conn = new Connection('localhost','plusql','plusql','plusql');
         $conn->connect();
 

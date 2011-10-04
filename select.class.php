@@ -1,5 +1,8 @@
 <?php
-    class PlusqlSelect
+    namespace Plusql;
+    use Exception;
+
+    class Select
     {
         private $tables;
         private $target;
@@ -43,7 +46,7 @@
 
             if(!isset($this->tables[$name]))
             {
-                $this->tables[$name] = new PlusqlTable($name);
+                $this->tables[$name] = new Table($name);
                 
                 if($previous)
                     $previous->joinTable($this->tables[$name]);

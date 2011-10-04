@@ -1,5 +1,7 @@
 <?php
-    class PlusqlTable
+    namespace Plusql;
+
+    class Table
     {
         private $name;
         private $join_to;

@@ -1,4 +1,7 @@
 <?php
+    namespace plusql;
+    use Exception,mysqli;
+
     class OnClause
     {
         private $left;

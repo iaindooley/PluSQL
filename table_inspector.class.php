@@ -1,4 +1,6 @@
 <?php
+    namespace plusql;
+
     class TableInspector
     {
         private $workers;

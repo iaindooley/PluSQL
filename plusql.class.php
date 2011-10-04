@@ -42,7 +42,7 @@
             
             if(!isset(self::$instance->connections[$key]))
             {
-                $conn = new Connection($host,$user,$password,$dbname);
+                $conn = new plusql\Connection($host,$user,$password,$dbname);
                 self::$instance->connections[$key] = $conn;
             }
             else

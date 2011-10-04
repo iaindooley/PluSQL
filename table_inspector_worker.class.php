@@ -1,4 +1,7 @@
 <?php
+    namespace plusql;
+    use Exception,mysqli,mysqli_result;
+
     class TableInspectorWorker
     {
         private $table_name;

@@ -1,5 +1,8 @@
 <?php
-    class PlusqlQueryIterator implements Iterator
+    namespace plusql;
+    use Iterator;
+
+    class QueryIterator implements Iterator
     {
         private $index;
         private $starting_index;
@@ -17,7 +20,7 @@
             $this->table = $table;
             $this->current_row = NULL;
             $this->constrain = array();
-            $test = new PlusqlQueryRow($this->query,$this->table,$this->index);
+            $test = new QueryRow($this->query,$this->table,$this->index);
             $test->keySignature();
         }
         
@@ -33,9 +36,9 @@
             foreach($this->constrain as $name => $value)
             {
                 if(!isset($row[$name]))
-                    throw new InvalidPlusqlQueryRowException('I am somehow constrained to field: '.$name.' but that doesn\'t exist in the query ... que?');
+                    throw new InvalidQueryRowException('I am somehow constrained to field: '.$name.' but that doesn\'t exist in the query ... que?');
                 if($row[$name] != $value)
-                    throw new InvalidPlusqlQueryRowException('Constrain no que es pendeho mucho');
+                    throw new InvalidQueryRowException('Constrain no que es pendeho mucho');
             }
         }
         
@@ -44,11 +47,11 @@
             try
             {
                 $this->checkConstraints();
-                $this->current_row = new PlusqlQueryRow($this->query,$this->table,$this->index);
+                $this->current_row = new QueryRow($this->query,$this->table,$this->index);
                 $ret = $this->current_row;
             }
             
-            catch(InvalidPlusqlQueryRowException $exc)
+            catch(InvalidQueryRowException $exc)
             {
                 $ret = FALSE;
             }
@@ -65,12 +68,12 @@
         {
             try
             {
-                $next_row = new PlusqlQueryRow($this->query,$this->table,$this->index);
+                $next_row = new QueryRow($this->query,$this->table,$this->index);
 
                 while($next_row->keySignature() == $this->current_row->keySignature())
                 {
                     $this->index++;
-                    $next_row = new PlusqlQueryRow($this->query,$this->table,$this->index);
+                    $next_row = new QueryRow($this->query,$this->table,$this->index);
                     $this->checkConstraints();
                 }
                 
@@ -78,7 +81,7 @@
                 $ret = $next_row;
             }
             
-            catch(InvalidPlusqlQueryRowException $exc)
+            catch(InvalidQueryRowException $exc)
             {
                 $ret = FALSE;
             }
@@ -96,11 +99,11 @@
         {
             try
             {
-                $ret = is_object(new PlusqlQueryRow($this->query,$this->table,$this->index));
+                $ret = is_object(new QueryRow($this->query,$this->table,$this->index));
                 $this->checkConstraints();
             }
                 
-            catch(InvalidPlusqlQueryRowException $exc)
+            catch(InvalidQueryRowException $exc)
             {
                 $ret = FALSE;
             }

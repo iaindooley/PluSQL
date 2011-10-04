@@ -1,4 +1,7 @@
 <?php
+    namespace plusql;
+    use mysqli,Plusql;
+
     class Connection
     {
         private $credentials;
@@ -29,6 +32,6 @@
         
         public function query($sql)
         {
-            return new PlusqlQuery($sql,$this->link);
+            return new Query($sql,$this->link);
         }
     }

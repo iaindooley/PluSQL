@@ -1,5 +1,8 @@
 <?php
-    class PlusqlQuery
+    namespace plusql;
+    use Exception,mysqli;
+
+    class Query
     {
         private $query;
         private $link;
@@ -27,7 +30,7 @@
         
         public function __get($name)
         {
-            return new PlusqlQueryIterator($this,$name);
+            return new QueryIterator($this,$name);
         }
         
         public function nextRow()
@@ -50,7 +53,7 @@
             if(!$num_rows)
                 throw new EmptySetException('You have passed me a query that returns no information');
             if($num_rows <= $index)
-                throw new InvalidPlusqlQueryRowException('Out of range');
+                throw new InvalidQueryRowException('Out of range');
 
             if($this->link instanceof mysqli)
             {
