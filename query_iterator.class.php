@@ -12,7 +12,7 @@
         private $constrain;
         private $current_key_signature;
         
-        public function __construct($query,$table,$index = 0)
+        public function __construct(Query $query,$table,$index = 0)
         {
             $this->index = $index;
             $this->starting_index = $index;

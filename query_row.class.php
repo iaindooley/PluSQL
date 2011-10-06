@@ -53,7 +53,7 @@
             {
                 try
                 {
-                    $ret = new PlusqlQueryIterator($this->query,$name,$this->index);
+                    $ret = new QueryIterator($this->query,$name,$this->index);
                     $pairs = array();
                     
                     foreach($this->table_inspector->primaryKeys() as $name)

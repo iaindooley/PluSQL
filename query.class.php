@@ -1,6 +1,6 @@
 <?php
     namespace plusql;
-    use Exception,mysqli;
+    use EmptySetException,Exception,mysqli;
 
     class Query
     {
