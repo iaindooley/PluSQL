@@ -1,5 +1,5 @@
 <?php
-    namespace Plusql;
+    namespace plusql;
     use Exception;
 
     class Select
@@ -19,16 +19,6 @@
             $this->query_props = array();
         }
         
-        public function getProperty($name)
-        {
-            $ret = '';
-            
-            if(isset($this->query_props[$name]))
-                $ret = $this->query_props[$name];
-            
-            return $ret;
-        }
-
         public function __call($name,$args)
         {
             if(!count($args))
@@ -62,7 +52,6 @@
                 $this->target = $this->tables[$return];
             }
             
-
             if($this->initial_table === NULL)
                 $this->initial_table = $this->target;
 
@@ -71,15 +60,11 @@
 
         public function __get($name)
         {
-            if($name == '_')
-                $ret = $this->_();
-            else
-                $ret = $this->fromClause($name);
-            
+            $ret = $this->fromClause($name);
             return $ret;
         }
         
-        public function _()
+        public function buildFromClause()
         {
             $from_clause = '';
             $stack = array($this->initial_table);
@@ -110,7 +95,12 @@
                 }
             }
             
-            $query = 'SELECT '.$this->select().' '.$from_clause.' WHERE '.$this->where();
+            return $from_clause;
+        }
+        
+        public function sql()
+        {
+            $query = 'SELECT '.$this->select().' '.$this->buildFromClause().' WHERE '.$this->where();
             
             if($group_by = $this->groupBy())
                 $query .= ' GROUP BY '.$group_by;

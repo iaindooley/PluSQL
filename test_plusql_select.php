@@ -21,7 +21,7 @@
                                ->having('author.author_id > 1')
                                ->orderBy('book.author_id,book.book_id')
                                ->limit('100')
-                               ->_;
+                               ->();
 
     foreach(Plusql::begin('live')->query($sql)->author as $auth)
         echo $auth->author_first_name.PHP_EOL;

@@ -1,7 +1,7 @@
 <?php
     /**
-    * dbname 
-    * plusql 
+    * dbname
+    * plusql
     */
     murphy\Fixture::add(function($row)
     {

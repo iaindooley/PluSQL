@@ -1,5 +1,5 @@
 <?php
-    namespace Plusql;
+    namespace plusql;
 
     class Table
     {
@@ -35,7 +35,7 @@
             return $this->join_to;
         }
 
-        public function joinTable($table)
+        public function joinTable(Table $table)
         {
             $this->join_to[$table->name()] = $table;
             $table->setJoinType(self::INNER_JOIN);
