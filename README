@@ -87,3 +87,9 @@ TODO (before launching):
  * simplfying the default order clause by primary keys to create contiguous blocks
 
  * You can use PlusqlSelect::__toString() magic method instead of terminating with ->_;
+
+FROM select.class.php
+        // default inner join, allow left call to override
+        // allow custom on clause
+        // should automatically detect mapping tables
+        // let's create a way to retrieve a table previously added
