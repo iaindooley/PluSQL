@@ -56,6 +56,11 @@
         {
             return new PlusqlSelect(self::connect($credentials));
         }
+
+        public function into($credentials)
+        {
+            return new PlusqlInsert(self::connect($credentials));
+        }
     }
 
     class PlusqlConnectionException extends Exception {}

@@ -69,6 +69,8 @@ we can work on query building vs. query reading as completely separate problems.
 
 TODO (before launching):
 
+ * make from() connect() into() use default database credentials
+
  * implement prepared statements as standard instead of mysql_query()
    but still allow non prepared statements if required as legacy
 
