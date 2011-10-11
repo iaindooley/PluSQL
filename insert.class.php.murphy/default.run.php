@@ -4,19 +4,12 @@
     
     \murphy\Test::add(function($runner)
     {
-        $conn = NULL;
         \murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')
-        ->execute(function($aliases) use(&$conn)
-        {
-            $aliases = $aliases['plusql'];
-            $host = $aliases[0];
-            $username = $aliases[1];
-            $password = $aliases[2];
-            $dbname = $aliases[3];
-            $conn = new Connection($host,$username,$password,$dbname);
-            $conn->connect();
-        });
-        
+        ->execute();
+        $to = 'plusql';
+        $conn = new Connection('localhost',$to,$to,$to);
+        $conn->connect();
+
         $ins = new Insert($conn);
         $ins->weak_guy(array('strong_guy_id' => 1,
                              'weak_name'     => 'Winkly Weakling'))
