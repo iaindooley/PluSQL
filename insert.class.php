@@ -1,5 +1,6 @@
 <?php
     namespace plusql;
+    use Exception;
     
     class Insert
     {
@@ -14,7 +15,7 @@
         {
             echo $name.PHP_EOL;
             
-            if(!is_array($args) || (count($args) > 1)
+            if(!is_array($args) || (count($args) > 1))
                 throw new InvalidInsertArgumentsException('When you call a method on Insert you should pass in an array of key/value pairs to be inserted');
         }
     }
