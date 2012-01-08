@@ -54,12 +54,12 @@
         
         public function from($credentials)
         {
-            return new PlusqlSelect(self::connect($credentials));
+            return new plusql\Select(self::connect($credentials));
         }
 
         public function into($credentials)
         {
-            return new PlusqlInsert(self::connect($credentials));
+            return new plusql\Insert(self::connect($credentials));
         }
     }
 
