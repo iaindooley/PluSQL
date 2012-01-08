@@ -55,6 +55,8 @@
     
                     if($do_quotes)
                         $value = '\''.$value.'\'';
+                    else if(!$value)
+                        $value = 0;
                     
                     $last_values[$f['Field']] = $value;
                 }
@@ -65,18 +67,67 @@
         
         public function insert()
         {
-            $all_fields = $this->table->allFields();
-            $unused_field_names = array();
-            
-            foreach($all_fields as $f)
-                $unused_field_names[] = $f['Field'];
-            
-            die(print_r($unused_field_names));
+            return $this->conn->query($this->insertSql());
+        }
+
+        public function insertSql()
+        {
+            return 'INSERT '.$this->baseSql();
         }
 
         public function replace()
         {
-            die('building a replace query');
+            return $this->conn->query($this->replaceSql());
+        }
+
+        public function replaceSql()
+        {
+            return 'REPLACE '.$this->baseSql();
+        }
+        
+        private function baseSql()
+        {
+            $all_fields = $this->table->allFields();
+            $indexed    = array();
+
+            foreach($all_fields as $f)
+                $indexed[$f['Field']] = $f;
+
+            
+            $field_names = array_keys($indexed);
+            $used_fields = array();
+            $value_arrays = array();
+            
+            $value_arrays = array_map(function($element) use($field_names,&$used_fields)
+            {
+                $cur_array = array_fill(0,count($field_names),NULL);
+                
+                foreach($element as $fname => $value)
+                {
+                    $position = array_search($fname,$field_names);
+                    $cur_array[$position] = $value;
+                    $used_fields[$fname] = 1;
+                }
+                
+                return $cur_array;
+            },$this->values);
+
+            $used_fields = array_keys($used_fields);
+            $unused = array_diff($field_names,$used_fields);
+            
+            $final_values = array_map(function($element) use($field_names,$unused,$indexed)
+            {
+                foreach($unused as $rem)
+                    unset($element[array_search($rem,$field_names)]);
+
+                foreach($element as $name => $value)
+                    if($value === NULL)
+                        $element[$name] = $indexed[$name]['Default'];
+                   
+                return '('.implode(',',$element).')';
+            },$value_arrays);
+            
+            return 'INTO `'.$this->table->name().'`(`'.implode('`,`',$used_fields).'`) VALUES'.implode(',',$final_values);
         }
     }
 

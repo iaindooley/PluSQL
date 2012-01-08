@@ -57,6 +57,9 @@ $stmt->insert();
         //CAN ALSO FILTER WITH A CUSTOM FUNCTION
         ->filter(function($link,$name,$value)
         {
-            return $link->escape_string($value);
+            if($link instanceof mysqli)
+                $ret = $link->escape_string($value);
+            else
+                $ret = mysql_real_escape_string($value,$link);
         })->insert();
     });
