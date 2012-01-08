@@ -65,7 +65,13 @@
         
         public function insert()
         {
-print_r($this->values);
+            $all_fields = $this->table->allFields();
+            $unused_field_names = array();
+            
+            foreach($all_fields as $f)
+                $unused_field_names[] = $f['Field'];
+            
+            die(print_r($unused_field_names));
         }
 
         public function replace()
