@@ -21,7 +21,16 @@
                 throw new InvalidInsertArgumentsException('When you call a method on Insert you should pass in an array of key/value pairs to be inserted');
             
             $this->table = TableInspector::forTable($name,$this->conn->link());
-            $this->values[] = $args[0];
+            $use = array();
+            $fields = $this->table->allFields();
+            //WE ONLY WANT TO USE FIELDS WE KNOW ABOUT
+            foreach($fields as $f)
+            {
+                if(isset($args[0][$f['Field']]))
+                    $use[$f['Field']] = $args[0][$f['Field']];
+            }
+            
+            $this->values[] = $use;
             return $this;
         }
         
