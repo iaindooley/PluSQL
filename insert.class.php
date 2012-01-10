@@ -71,10 +71,13 @@
                 if(Table::fieldRequiresQuotesForValue($f,$value))
                     $do_quotes = TRUE;
                 
-                if($this->conn->link() instanceof mysqli)
-                    $value = $this->conn->link()->escape_string($value);
-                else
-                    $value = mysql_real_escape_string($value,$this->conn->link());
+                if(!($value instanceof SqlFunction))
+                {
+                    if($this->conn->link() instanceof mysqli)
+                        $value = $this->conn->link()->escape_string($value);
+                    else
+                        $value = mysql_real_escape_string($value,$this->conn->link());
+                }
                 
                 if(!$do_quotes)
                     $value = Table::stripForNumericField($f,$value);
