@@ -21,8 +21,9 @@
         mysql_query('
 CREATE TABLE `type_test` (
   `int_auto_field` int(10) NOT NULL AUTO_INCREMENT,
-  `varchar_field` varchar(20) DEFAULT NULL,
-  `int_field_default_10` int(10) NOT NULL DEFAULT '10',
+  `varchar_field_default_null` varchar(200) DEFAULT NULL,
+  `varchar_field_default_something` varchar(200) NOT NULL DEFAULT \'something\',
+  `int_field_default_10` int(10) NOT NULL DEFAULT \'10\',
   `int_field_default_null` int(10) DEFAULT NULL,
   `float_field_default_null` float DEFAULT NULL,
   `float_field_default_2point5` float NOT NULL DEFAULT 2.5,
@@ -31,7 +32,7 @@ CREATE TABLE `type_test` (
   `decimal_field_default_null` decimal(10,2) DEFAULT NULL,
   `decimal_field_default_10point2` decimal(10,2) NOT NULL DEFAULT 10.2,
   `datetime_field_default_null` datetime DEFAULT NULL,
-  `datetime_field_default_something` datetime NOT NULL DEFAULT '2012-01-01',
+  `datetime_field_default_something` datetime NOT NULL DEFAULT \'2012-01-01\',
   PRIMARY KEY(int_auto_field)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1') or die(mysql_error());
 

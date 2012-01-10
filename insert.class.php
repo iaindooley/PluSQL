@@ -7,12 +7,19 @@
         private $conn;
         private $table;
         private $values;
+        private $filter;
 
         public function __construct(Connection $conn)
         {
             $this->conn   = $conn;
             $this->table  = NULL;
             $this->values = array();
+            $this->filter = NULL;
+        }
+        
+        public function usedFilter()
+        {
+            return $this->filter;
         }
         
         public function __call($name,$args)
@@ -45,33 +52,40 @@
             foreach($this->table->allFields() as $f)
             {
                 if(isset($last_values[$f['Field']]))
-                {
-                    $value = $last_values[$f['Field']];
-                    $do_quotes = FALSE;
-
-                    if(Table::fieldRequiresQuotesForValue($f,$value))
-                        $do_quotes = TRUE;
-
-                    if($filter)
-                        $value = $filter($this->conn->link(),$f['Field'],$value);
-                    else
-                    {
-                        if($this->conn->link() instanceof mysqli)
-                            $value = $this->conn->link()->escape_string($value);
-                        else
-                            $value = mysql_real_escape_string($value,$this->conn->link());
-                    }
-    
-                    if($do_quotes)
-                        $value = '\''.$value.'\'';
-                    else if(!$value)
-                        $value = 0;
-                    
-                    $last_values[$f['Field']] = $value;
-                }
+                    $last_values[$f['Field']] = $this->filterValueForField($f,$last_values[$f['Field']],$filter);
             }
             
+            $this->filter = $filter;
             return $this;
+        }
+        
+        public function filterValueForField($f,$value,Closure $filter = NULL)
+        {
+            if($filter)
+                $value = $filter($this->conn->link(),$f,$value);
+            //BY DEFAULT, ESCAPE THE STRING, THEN CAST TO APPROPRIATE TYPE, ADDING QUOTES AS REQUIRED
+            else
+            {
+                $do_quotes = FALSE;
+
+                if(Table::fieldRequiresQuotesForValue($f,$value))
+                    $do_quotes = TRUE;
+                
+                if($this->conn->link() instanceof mysqli)
+                    $value = $this->conn->link()->escape_string($value);
+                else
+                    $value = mysql_real_escape_string($value,$this->conn->link());
+                
+                if(!$do_quotes)
+                    $value = Table::stripForNumericField($f,$value);
+
+                if($do_quotes)
+                    $value = '\''.$value.'\'';
+                else if(!$value)
+                    $value = 0;
+            }
+            
+            return $value;
         }
         
         public function insert()
@@ -123,21 +137,31 @@
 
             $used_fields = array_keys($used_fields);
             $unused = array_diff($field_names,$used_fields);
-            
-            $final_values = array_map(function($element) use($field_names,$unused,$indexed)
+            $obj = $this;
+
+            $final_values = array_map(function($element) use($field_names,$unused,$indexed,$obj)
             {
                 foreach($unused as $rem)
                     unset($element[array_search($rem,$field_names)]);
 
-                foreach($element as $name => $value)
+                foreach($element as $index => $value)
+                {
                     if($value === NULL)
-                        $element[$name] = $indexed[$name]['Default'];
+                    {
+                        $f = $indexed[$field_names[$index]];
+                        $element[$index] = $obj->filterValueForField($f,$f['Default'],$obj->usedFilter());
+                    }
+                }
                    
                 return '('.implode(',',$element).')';
             },$value_arrays);
+
+            if(!count($used_fields))
+                throw new InvalidInsertQueryException('I was unable to build baseSql() because there were no used fields');
             
             return 'INTO `'.$this->table->name().'`(`'.implode('`,`',$used_fields).'`) VALUES'.implode(',',$final_values);
         }
     }
 
     class InvalidInsertArgumentsException extends Exception{}
+    class InvalidInsertQueryException extends Exception{}
