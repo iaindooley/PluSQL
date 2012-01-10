@@ -173,11 +173,6 @@
         {
             return $this->queryProperty('limit',$limit);
         }
-
-        // default inner join, allow left call to override
-        // allow custom on clause
-        // should automatically detect mapping tables
-        // let's create a way to retrieve a table previously added
     }
 
     class InvalidReturnSelectorException extends Exception{}

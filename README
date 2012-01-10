@@ -21,58 +21,29 @@ Plusql consists of two parts:
  - the bit that reads a query
  - the bit that builds a query
 
-The bit that builds a query is not implemented yet.
+-----------------------------
+Typical usage:
+-----------------------------
 
-The bit that reads a query is implemented but doesn't yet
-use parametrized queries by default which I intend to implement
-prior to it's release.
+Plusql::credentials('name',array('localhost','user','pass','db'));
 
-The interface between these two bits is just SQL - meaning
-that we can start with just the query reading bit and move
-onto designing the most awesome query building bit ever.
+Plusql::into('live')->table_name($_POST)->filter()-insert();
 
-Plusql is implemented here using PHP, however it was so
-easy to build (only took me an hour to write the actual
-code) that I would encourage others to use a similar 
-pattern and implement it in other languages.
+foreach(Plusql::from('live')->table_one
+                            ->table_two->select('key1,key2,f1,f2')
+                            ->where('fname = \''.mysql_real_escape_string($some_value).'\'')
+                            ->run()->table_one as $t1)
+{
+    echo $t1->f1.':'.$t1->table_two->f2.PHP_EOL;
+}
 
-TO RUN THE TESTS:
-
-mysql -u root -pROOTPASS < plusql.sql
-sed -i "s/ROOTPASS/YOUR ACTUAL ROOT MYSQL PASS/g" dbconfig.php
-
-php fixture.php 	#creates all your test data
-
-php test.php            #loops through an absolutely massive data set
-                        #and prints peak memory usage at the end
-                        #i've limited the query to 1000 rows but
-                        #if you remove that you'll see it takes longer
-                        #but peak memory usage stays the same
-
-if you look you'll see that it copes easily with switching between
-databases in the nested authorNames() function.
-
-also note that you don't have to create any boilerplate classes,
-the primary keys for each type of table are read in from the database
-so each iterator object knows how to completely identify itself
-from any given row in the database.
-
-NB: Plusql is a 2 part system: it completely separates the "reading"
-part of ORM from the query building.
-
-I have yet to implement the query builder but some ideas I have are
-to make it not "all or nothing" - ie. simplify the boring parts of
-query building but allow you to "mix n match" with hand written SQL.
-
-The beauty part is that because Plusql takes ANY SQL at all as input,
-we can work on query building vs. query reading as completely separate problems.
-
+-----------------------------
 TODO (before launching):
+-----------------------------
 
  * make from() connect() into() use default database credentials
 
- * implement prepared statements as standard instead of mysql_query()
-   but still allow non prepared statements if required as legacy
+ * default filtering/escaping in select clauses? 
 
  * come up with a good "mix in" style to cast the objects returned from the iterator
    to a new class for implementing custom functionality (that one would normally include
