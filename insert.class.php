@@ -123,7 +123,7 @@
             $field_names = array_keys($indexed);
             $used_fields = array();
             $value_arrays = array();
-            
+
             $value_arrays = array_map(function($element) use($field_names,&$used_fields)
             {
                 $cur_array = array_fill(0,count($field_names),NULL);
@@ -162,7 +162,15 @@
             if(!count($used_fields))
                 throw new InvalidInsertQueryException('I was unable to build baseSql() because there were no used fields');
             
-            return 'INTO `'.$this->table->name().'`(`'.implode('`,`',$used_fields).'`) VALUES'.implode(',',$final_values);
+            $final = array();
+
+            foreach($field_names as $fn)
+            {
+                if(array_search($fn,$used_fields) !== FALSE)
+                    $final[] = $fn;
+            }
+            
+            return 'INTO `'.$this->table->name().'`(`'.implode('`,`',$final).'`) VALUES'.implode(',',$final_values);
         }
     }
 
