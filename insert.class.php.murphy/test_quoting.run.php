@@ -1,3 +1,7 @@
+<?php
+    namespace plusql;
+    use Plusql,mysqli;
+
     /**
     * Testing the quoting behaviour and default values
     */

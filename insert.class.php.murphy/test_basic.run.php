@@ -33,12 +33,12 @@
             $runner->fail('Insert sql was rendered differently second time around');
 
         $ins = new Insert($conn);
-        $filter = function($link,$name,$value)
+        $filter = function($link,$field,$value)
         {
             return str_replace('2nd','3rd',$value);
         };
         $ins->weak_guy(array('strong_guy_id' => 1,
-                             'weak_name'     => 'Winkly Weakling The 2nd'))
+                             'weak_name'     => '\'Winkly Weakling The 2nd\''))
         //CAN ALSO PROVIDE CUSTOM FILTER FUNCTION THAT ACCEPTS $link,$name,$value
         ->filter($filter);
         
