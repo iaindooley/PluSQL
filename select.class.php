@@ -98,9 +98,17 @@
             return $from_clause;
         }
         
+        public function run()
+        {
+            return $this->connection->query($this->sql());
+        }
+
         public function sql()
         {
-            $query = 'SELECT '.$this->select().' '.$this->buildFromClause().' WHERE '.$this->where();
+            $query = 'SELECT '.$this->select().' '.$this->buildFromClause();
+
+            if($where = $this->where())
+                $query .= ' WHERE '.$where;
             
             if($group_by = $this->groupBy())
                 $query .= ' GROUP BY '.$group_by;

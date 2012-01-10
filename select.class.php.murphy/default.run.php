@@ -70,6 +70,16 @@
     });
     
     /**
+    * Test an empty where clause
+    */
+    \murphy\Test::add(function($runner)
+    {
+        $conn = getConnection();
+        $sel = new Select($conn);
+        $sel->strong_guy->sql();
+    });
+    
+    /**
     * Now just do a bit of an end-to-end test building a big fuckoff query
     */
     \murphy\Test::add(function($runner)
