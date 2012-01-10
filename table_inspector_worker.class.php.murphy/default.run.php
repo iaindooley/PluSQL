@@ -4,8 +4,8 @@
     \murphy\Test::add(function($runner)
     {
         $conn = NULL;
-        \murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')
-        ->also(dirname(__FILE__).'/../query_iterator.class.php.murphy/fixture.php')
+        \murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')->execute();
+        \murphy\Fixture::load(dirname(__FILE__).'/../query_iterator.class.php.murphy/fixture.php')
         ->execute(function($aliases) use(&$conn)
         {
             $aliases = $aliases['plusql'];
