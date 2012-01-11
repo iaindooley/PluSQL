@@ -53,10 +53,10 @@
         Plusql::credentials('live',array('localhost','plusql','plusql','plusql'));
         $f = Plusql::escape('live');
         
-        $sql = Plusql::from('live')->strong_guy->select('*')->where('strong_name = \''.$f('Strong Name\'s').'\'')->sql();
+        $sql = (string)Plusql::from('live')->strong_guy->select('*')->where('strong_name = \''.$f('Strong Name\'s').'\'');
         
         if($sql == 'SELECT * from strong_guy WHERE strong_name = \'Strong Name\\\'s\'')
             $runner->pass();
         else
-            $runner->fail('Did not get the correct value after escaping);
+            $runner->fail('Did not get the correct value after escaping');
     });
