@@ -1,6 +1,6 @@
 <?php
     namespace plusql;
-    use Exception,Closure,mysqli;
+    use Exception,Closure,mysqli,Bind;
     
     class Insert
     {
@@ -65,28 +65,7 @@
                 $value = $filter($this->conn->link(),$f,$value);
             //BY DEFAULT, ESCAPE THE STRING, THEN CAST TO APPROPRIATE TYPE, ADDING QUOTES AS REQUIRED
             else
-            {
-                $do_quotes = FALSE;
-
-                if(Table::fieldRequiresQuotesForValue($f,$value))
-                    $do_quotes = TRUE;
-                
-                if(!($value instanceof SqlFunction))
-                {
-                    if($this->conn->link() instanceof mysqli)
-                        $value = $this->conn->link()->escape_string($value);
-                    else
-                        $value = mysql_real_escape_string($value,$this->conn->link());
-                }
-                
-                if(!$do_quotes)
-                    $value = Table::stripForNumericField($f,$value);
-
-                if($do_quotes)
-                    $value = '\''.$value.'\'';
-                else if(!$value)
-                    $value = 0;
-            }
+                $value = Bind::filterValueForField($this->conn->link(),$f,$value);
             
             return $value;
         }

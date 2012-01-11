@@ -1,6 +1,6 @@
 <?php
     namespace plusql;
-    use Exception;
+    use Exception,Bind;
 
     class Select
     {
@@ -151,6 +151,9 @@
 
         public function where($where = NULL)
         {
+            if($where instanceof Bind)
+                $where->setLink($this->connection->link());
+
             return $this->queryProperty('where',$where);
         }
 

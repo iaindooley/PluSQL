@@ -29,6 +29,18 @@
             else
                 mysql_select_db($this->credentials[Plusql::NAME],$this->link) or die(mysql_error());
         }
+
+        public function escape($value)
+        {
+            $ret = NULL;
+
+            if($this->link instanceof mysqli)
+                $ret = $this->link->escape_string($value);
+            else
+                $ret = mysql_real_escape_string($value);
+            
+            return $ret;
+        }
         
         public function query($sql)
         {

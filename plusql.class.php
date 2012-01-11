@@ -52,24 +52,36 @@
             return $conn;
         }
         
-        public function from($credentials)
+        public static function from($credentials)
         {
             return new plusql\Select(self::connect($credentials));
         }
 
-        public function into($credentials)
+        public static function into($credentials)
         {
             return new plusql\Insert(self::connect($credentials));
         }
 
-        public function against($credentials)
+        public static function against($credentials)
         {
             return new plusql\RawQuery(self::connect($credentials));
         }
 
-        public function on($credentials)
+        public static function on($credentials)
         {
             return new plusql\Update(self::connect($credentials));
+        }
+        
+        public static function escape($credentials)
+        {
+            $conn = self::connect($credentials);
+            
+            $ret = function($value) use($conn)
+            {
+                return $conn->escape($value);
+            };
+            
+            return $ret;
         }
     }
 

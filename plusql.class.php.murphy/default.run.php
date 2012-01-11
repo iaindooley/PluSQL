@@ -33,3 +33,30 @@
         else
             $runner->fail('I was unable to switch back to the dev database after switching from dev to live');
     });
+
+    murphy\Test::add(function($runner)
+    {
+        $conn = NULL;
+        \murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')->execute();
+        \murphy\Fixture::load(dirname(__FILE__).'/../query_iterator.class.php.murphy/fixture.php')
+        ->execute(function($aliases) use(&$conn)
+        {   
+            $aliases = $aliases['plusql'];
+            $host = $aliases[0];
+            $username = $aliases[1];
+            $password = $aliases[2];
+            $dbname = $aliases[3];
+            $conn = new plusql\Connection($host,$username,$password,$dbname);
+            $conn->connect();
+        });
+
+        Plusql::credentials('live',array('localhost','plusql','plusql','plusql'));
+        $f = Plusql::escape('live');
+        
+        $sql = Plusql::from('live')->strong_guy->select('*')->where('strong_name = \''.$f('Strong Name\'s').'\'')->sql();
+        
+        if($sql == 'SELECT * from strong_guy WHERE strong_name = \'Strong Name\\\'s\'')
+            $runner->pass();
+        else
+            $runner->fail('Did not get the correct value after escaping);
+    });
