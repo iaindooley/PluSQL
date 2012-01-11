@@ -100,10 +100,10 @@
         
         public function run()
         {
-            return $this->connection->query($this->sql());
+            return $this->connection->query((string)$this);
         }
 
-        public function sql()
+        public function __toString()
         {
             $query = 'SELECT '.$this->select().' '.$this->buildFromClause();
 
