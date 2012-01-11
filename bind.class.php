@@ -26,10 +26,10 @@
         {
             $do_quotes = FALSE;
 
-            if(Table::fieldRequiresQuotesForValue($f,$value))
+            if(plusql\Table::fieldRequiresQuotesForValue($f,$value))
                 $do_quotes = TRUE;
 
-            if(!($value instanceof SqlFunction))
+            if(!($value instanceof plusql\SqlFunction))
             {   
                 if($link instanceof mysqli)
                     $value = $link->escape_string($value);
@@ -38,14 +38,14 @@
             }
             
             if(!$do_quotes)
-                $value = Table::stripForNumericField($f,$value);
+                $value = plusql\Table::stripForNumericField($f,$value);
 
             if($do_quotes)
                 $value = '\''.$value.'\'';
             else if(!$value)
                 $value = 0;
             
-            return $value
+            return $value;
         }
     }
 
