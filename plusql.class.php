@@ -61,6 +61,11 @@
         {
             return new plusql\Insert(self::connect($credentials));
         }
+
+        public function against($credentials)
+        {
+            return new plusql\RawQuery(self::connect($credentials));
+        }
     }
 
     class PlusqlConnectionException extends Exception {}
