@@ -76,7 +76,7 @@
     {
         $conn = getConnection();
         $sel = new Select($conn);
-        $sel->strong_guy->sql();
+        (string)$sel->strong_guy;
     });
     
     /**
@@ -85,7 +85,7 @@
     \murphy\Test::add(function($runner)
     {
         $sel = new Select(getConnection());
-        $query = $sel->strong_guy
+        $query = (string)$sel->strong_guy
                      ->weak_guy
                      ->rogue_guy('weak_guy')
                      ->french_guy
@@ -94,8 +94,7 @@
                      ->groupBy('strong_guy.strong_guy_id')
                      ->having('weak_guy_id > 1')
                      ->orderBy('strong_guy.strong_guy_id,weak_guy.weak_guy_id')
-                     ->limit('100')
-                     ->sql();
+                     ->limit('100');
         
         if($query == 'SELECT strong_guy.strong_name,weak_guy.weak_name,rogue_guy.rogue_name,french_guy.french_name from strong_guy INNER JOIN weak_guy ON strong_guy.strong_guy_id = weak_guy.strong_guy_id INNER JOIN is_rogue ON weak_guy.strong_guy_id = is_rogue.strong_guy_id AND weak_guy.weak_guy_id = is_rogue.weak_guy_id INNER JOIN rogue_guy ON is_rogue.rogue_guy_id = rogue_guy.rogue_guy_id INNER JOIN french_guy ON weak_guy.french_guy_id = french_guy.french_guy_id WHERE strong_guy.strong_guy_id > 1 GROUP BY strong_guy.strong_guy_id HAVING weak_guy_id > 1 ORDER BY strong_guy.strong_guy_id,weak_guy.weak_guy_id LIMIT 100')
             $runner->pass();
