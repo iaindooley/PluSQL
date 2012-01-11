@@ -1,6 +1,7 @@
 <?php
     namespace plusql;
     use Plusql;
+    require(dirname(__FILE__).'/functions.php');
 
     /**
     * Start off by testing building the from clause
@@ -10,22 +11,22 @@
         $conn = getConnection();
         $sel = new Select($conn);
         $sel->strong_guy;
-        
-        if($sel->buildFromClause() == 'from strong_guy')
+
+        if($sel->buildFromClause() == 'FROM strong_guy')
             $runner->pass();
         else
             $runner->fail('Unable to build a single table strong clause for strong_guy');
         
         $sel->weak_guy;
         
-        if($sel->buildFromClause() == 'from strong_guy INNER JOIN weak_guy ON strong_guy.strong_guy_id = weak_guy.strong_guy_id')
+        if($sel->buildFromClause() == 'FROM strong_guy INNER JOIN weak_guy ON strong_guy.strong_guy_id = weak_guy.strong_guy_id')
             $runner->pass();
         else
             $runner->fail('Unable to append a weak_guy to the from clause for strong_guy');
         
         $sel->french_guy('weak_guy')->rogue_guy;
         
-        if($sel->buildFromClause() == 'from strong_guy INNER JOIN weak_guy ON strong_guy.strong_guy_id = weak_guy.strong_guy_id INNER JOIN french_guy ON weak_guy.french_guy_id = french_guy.french_guy_id INNER JOIN is_rogue ON weak_guy.strong_guy_id = is_rogue.strong_guy_id AND weak_guy.weak_guy_id = is_rogue.weak_guy_id INNER JOIN rogue_guy ON is_rogue.rogue_guy_id = rogue_guy.rogue_guy_id')
+        if($sel->buildFromClause() == 'FROM strong_guy INNER JOIN weak_guy ON strong_guy.strong_guy_id = weak_guy.strong_guy_id INNER JOIN french_guy ON weak_guy.french_guy_id = french_guy.french_guy_id INNER JOIN is_rogue ON weak_guy.strong_guy_id = is_rogue.strong_guy_id AND weak_guy.weak_guy_id = is_rogue.weak_guy_id INNER JOIN rogue_guy ON is_rogue.rogue_guy_id = rogue_guy.rogue_guy_id')
             $runner->pass();
         else
             $runner->fail('Unable to join french and rogue guys to the weak guy, using __call() and weak_guy as the target');
@@ -96,48 +97,8 @@
                      ->orderBy('strong_guy.strong_guy_id,weak_guy.weak_guy_id')
                      ->limit('100');
         
-        if($query == 'SELECT strong_guy.strong_name,weak_guy.weak_name,rogue_guy.rogue_name,french_guy.french_name from strong_guy INNER JOIN weak_guy ON strong_guy.strong_guy_id = weak_guy.strong_guy_id INNER JOIN is_rogue ON weak_guy.strong_guy_id = is_rogue.strong_guy_id AND weak_guy.weak_guy_id = is_rogue.weak_guy_id INNER JOIN rogue_guy ON is_rogue.rogue_guy_id = rogue_guy.rogue_guy_id INNER JOIN french_guy ON weak_guy.french_guy_id = french_guy.french_guy_id WHERE strong_guy.strong_guy_id > 1 GROUP BY strong_guy.strong_guy_id HAVING weak_guy_id > 1 ORDER BY strong_guy.strong_guy_id,weak_guy.weak_guy_id LIMIT 100')
+        if($query == 'SELECT strong_guy.strong_name,weak_guy.weak_name,rogue_guy.rogue_name,french_guy.french_name FROM strong_guy INNER JOIN weak_guy ON strong_guy.strong_guy_id = weak_guy.strong_guy_id INNER JOIN is_rogue ON weak_guy.strong_guy_id = is_rogue.strong_guy_id AND weak_guy.weak_guy_id = is_rogue.weak_guy_id INNER JOIN rogue_guy ON is_rogue.rogue_guy_id = rogue_guy.rogue_guy_id INNER JOIN french_guy ON weak_guy.french_guy_id = french_guy.french_guy_id WHERE strong_guy.strong_guy_id > 1 GROUP BY strong_guy.strong_guy_id HAVING weak_guy_id > 1 ORDER BY strong_guy.strong_guy_id,weak_guy.weak_guy_id LIMIT 100')
             $runner->pass();
         else
             $runner->fail('Unexpected output from big fuckoff query using Select');
     });
-
-    function getConnection()
-    {
-        $conn = NULL;
-        \murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')
-        ->also(dirname(__FILE__).'/../query_iterator.class.php.murphy/fixture.php')
-        ->execute(function($aliases) use(&$conn)
-        {
-            $aliases = $aliases['plusql'];
-            $host = $aliases[0];
-            $username = $aliases[1];
-            $password = $aliases[2];
-            $dbname = $aliases[3];
-            $conn = new Connection($host,$username,$password,$dbname);
-            $conn->connect();
-        });
-        
-        return $conn;
-    }
-    
-    function testProperty(Connection $conn,\murphy\Test $runner,$name,$initial,$additional)
-    {
-        $sel = new Select($conn);
-        $sel->$name($initial);
-        
-        if($sel->$name() == $initial)
-            $runner->pass();
-        else
-            $runner->fail('Unable to set '.$name.' clause to '.$initial);
-        
-        if($additional)
-        {
-            $sel->$name($sel->$name().$additional);
-            
-            if($sel->$name() == $initial.$additional)
-                $runner->pass();
-            else
-                $runner->fail('Unable to update '.$name.' clause to '.$initial.$additional);
-        }
-    }

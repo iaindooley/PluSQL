@@ -7,6 +7,7 @@
         private $join_to;
         private $join_type;
         const INNER_JOIN = 'INNER JOIN';
+        const LEFT_JOIN = 'LEFT JOIN';
         const NUMERIC = 'Numeric';
         const STRING = 'String';
         const DATE = 'Date';

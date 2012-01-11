@@ -7,12 +7,14 @@
         private $left;
         private $right;
         private $link;
+        private $join_type;
         
-        public function __construct($link,$left,$right)
+        public function __construct($link,$left,$right,$join_type = Table::INNER_JOIN)
         {
-            $this->left  = TableInspector::forTable($left,$link);
-            $this->right = TableInspector::forTable($right,$link);
-            $this->link  = $link;
+            $this->left      = TableInspector::forTable($left,$link);
+            $this->right     = TableInspector::forTable($right,$link);
+            $this->link      = $link;
+            $this->join_type = $join_type;
         }
         
         public function toString()
@@ -106,7 +108,19 @@
             foreach($use as $field)
                 $clauses[] = $this->left->name().'.'.$field.' = '.$this->right->name().'.'.$field;
             
-            return implode(' AND ',$clauses);
+            $ret = implode(' AND ',$clauses);
+            
+            if($this->join_type == Table::LEFT_JOIN)
+            {
+                $nulls = array();
+                
+                foreach($use as $field)
+                    $nulls[] = $this->right->name().'.'.$field.' IS NULL';
+
+                $ret = '('.$ret.' OR ('.implode(' AND ',$nulls).'))';
+            }
+
+            return $ret;
         }
         
         private function mapFields(&$map,&$names,$fields)

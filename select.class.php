@@ -9,6 +9,7 @@
         private $initial_table;
         private $connection;
         private $query_props;
+        private $last_added;
         
         public function __construct(Connection $connection)
         {
@@ -17,6 +18,7 @@
             $this->initial_table = NULL;
             $this->connection = $connection;
             $this->query_props = array();
+            $this->last_added = NULL;
         }
         
         public function __call($name,$args)
@@ -55,6 +57,15 @@
             if($this->initial_table === NULL)
                 $this->initial_table = $this->target;
 
+            $this->last_added = $name;
+            return $this;
+        }
+        
+        public function joinType($type)
+        {
+            if(isset($this->tables[$this->last_added]))
+                $this->tables[$this->last_added]->setJoinType($type);
+            
             return $this;
         }
 
@@ -72,21 +83,21 @@
             while($t = array_pop($stack))
             {
                 if(!$from_clause)
-                    $from_clause  = 'from '.$t->name();
+                    $from_clause  = 'FROM '.$t->name();
 
                 foreach($t->joinTo() as $t2)
                 {
                     try
                     {
-                        $on      = new OnClause($this->connection->link(),$t->name(),$t2->name());
+                        $on      = new OnClause($this->connection->link(),$t->name(),$t2->name(),$t2->joinType());
                         $onstring = $on->toString();
                         $from_clause .= ' '.$t2->joinType().' '.$t2->name().' ON '.$onstring;
                     }
                     
                     catch(ManyToManyJoinException $exc)
                     {
-                        $left_on = new OnClause($this->connection->link(),$t->name(),$exc->joiningTable()->name());
-                        $right_on  = new OnClause($this->connection->link(),$exc->joiningTable()->name(),$t2->name());
+                        $left_on = new OnClause($this->connection->link(),$t->name(),$exc->joiningTable()->name(),$t2->joinType());
+                        $right_on  = new OnClause($this->connection->link(),$exc->joiningTable()->name(),$t2->name(),$t2->joinType());
                         $from_clause  .= ' '.$t2->joinType().' '.$exc->joiningTable()->name().' ON '.$left_on->toString();
                         $from_clause  .= ' '.$t2->joinType().' '.$t2->name().' ON '.$right_on->toString();
                     }
