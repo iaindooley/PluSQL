@@ -1,19 +1,15 @@
-******** WARNING **********************************************
-******** WARNING **********************************************
-******** WARNING **********************************************
-
-NB: PluSQL is currently PRE-RELEASE - I intend to update
-it to use parametrized queries by default which may change
-the API. I'm making it available now only for preview purposes
-
-******** WARNING **********************************************
-******** WARNING **********************************************
-******** WARNING **********************************************
-
------------------------------
-PluSQL: The ORM for SQL lovers
+# PluSQL: The ORM for SQL lovers
 
 by: iain@workingsoftware.com.au
+
+PluSQL is a non-ActiveRecord based ORM for people that know SQL and love it.
+
+Although PluSQL is written for PHP 5.3 (and specifically for mysql/mysqli) I hope that people will provide non-ActiveRecord based ORM implementations in other languages/frameworks.
+
+## Goals
+
+
+
 -----------------------------
 
 Plusql consists of two parts:
@@ -38,10 +34,10 @@ foreach(Plusql::from('live')->table_one
 }
 
 -----------------------------
-TODO (before launching):
+TODO
 -----------------------------
 
- * make from() connect() into() use default database credentials
+ * make from() against() into() and on() use default database credentials
 
  * come up with a good "mix in" style to cast the objects returned from the iterator
    to a new class for implementing custom functionality (that one would normally include
@@ -58,6 +54,3 @@ TODO (before launching):
  * simplfying the default order clause by primary keys to create contiguous blocks
 
  * pagination (including for joined queries)
-
-FROM select.class.php
-        // default inner join, allow left call to override
