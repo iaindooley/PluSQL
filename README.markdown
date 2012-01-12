@@ -71,9 +71,7 @@ $profile = 'default';
 
 PluSQL intuits your database structure based on primary key names. Let's take the following table structure for example. If we were to give a "textual" description of this system we'd say:
 
-```
-We have 5 ables: strong_guy, weak_guy, french_guy, rogue_guy and is_rogue. weak_guy depends on strong_guy in a 1 to many dependent relationship. A weak_guy can be a type of french_buy in a 1 to many foreign relationship (foreign, french ... get it?). A weak_guy can be associated with any number of rogue_guys via the is_rogue table.
-```
+_We have 5 ables: strong_guy, weak_guy, french_guy, rogue_guy and is_rogue. weak_guy depends on strong_guy in a 1 to many dependent relationship. A weak_guy can be a type of french_buy in a 1 to many foreign relationship (foreign, french ... get it?). A weak_guy can be associated with any number of rogue_guys via the is_rogue table._
 
 The table structure looks like this:
 
