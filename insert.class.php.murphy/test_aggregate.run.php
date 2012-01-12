@@ -24,7 +24,7 @@
                      'datetime_field_default_something',
                     );
 
-        $ins->type_test(array('varchar_field_default_null' => new SqlFunction('REPLACE(\'onetwo\',\'one\',\'two\')')))->filter()->insert();
+        $ins->type_test(array('varchar_field_default_null' => new SqlFunction('REPLACE(\'onetwo\',\'one\',\'two\')')))->insert();
         Plusql::credentials('live',array('localhost','plusql','plusql','plusql'));
         
         if(Plusql::from('live')->type_test->select('int_auto_field,varchar_field_default_null')->run()->type_test->varchar_field_default_null != 'twotwo')

@@ -17,7 +17,7 @@
         $ins->weak_guy(array('strong_guy_id' => 1,
                              'weak_name'     => 'Weaky Weakling\'s',
                              'nothing'       => 'Nowhere',
-                             ))->filter();
+                             ));
 
         $test = 'INSERT INTO `weak_guy`(`strong_guy_id`,`weak_name`) VALUES(1,\'Weaky Weakling\\\'s\')';
         
@@ -38,13 +38,11 @@
             return str_replace('2nd','3rd',$value);
         };
         $ins->weak_guy(array('strong_guy_id' => 1,
-                             'weak_name'     => '\'Winkly Weakling The 2nd\''))
-        //CAN ALSO PROVIDE CUSTOM FILTER FUNCTION THAT ACCEPTS $link,$name,$value
-        ->filter($filter);
+                             'weak_name'     => '\'Winkly Weakling The 2nd\''));
         
         $test = 'INSERT INTO `weak_guy`(`strong_guy_id`,`weak_name`) VALUES(1,\'Winkly Weakling The 3rd\')';
 
-        if($ins->insertSql() === $test)
+        if($ins->insertSql($filter) === $test)
             $runner->pass();
         else
             $runner->fail('Unable to provide custom filter');

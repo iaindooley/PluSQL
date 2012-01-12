@@ -7,7 +7,6 @@
         private $conn;
         private $table;
         private $values;
-        private $filter;
         private $where;
         const ENTIRE_TABLE = 'ENTIRE_TABLE';
 
@@ -16,7 +15,6 @@
             $this->conn   = $conn;
             $this->table  = NULL;
             $this->values = NULL;
-            $this->filter = NULL;
             $this->where  = NULL;
         }
         
@@ -48,18 +46,17 @@
         * Filter the last set of values that were added for insertion using mysql_real_escape_string
         * by default or optionally a closure
         */
-        public function filter(Closure $filter = NULL)
+        private function filter(Closure $filter = NULL)
         {
-            $last_values = &$this->values;
-            
+            $ret = array();
+
             foreach($this->table->allFields() as $f)
             {
-                if(isset($last_values[$f['Field']]))
-                    $last_values[$f['Field']] = $this->filterValueForField($f,$last_values[$f['Field']],$filter);
+                if(isset($this->values[$f['Field']]))
+                    $ret[$f['Field']] = $this->filterValueForField($f,$this->values[$f['Field']],$filter);
             }
             
-            $this->filter = $filter;
-            return $this;
+            return $ret;
         }
         
         public function filterValueForField($f,$value,Closure $filter = NULL)
@@ -73,9 +70,9 @@
             return $value;
         }
         
-        public function update()
+        public function update(Closure $filter = NULL)
         {
-            return $this->conn->query($this->updateSql());
+            return $this->conn->query($this->updateSql($filter));
         }
         
         public function where($clause)
@@ -84,15 +81,17 @@
             return $this;
         }
 
-        public function updateSql()
+        public function updateSql(Closure $filter = NULL)
         {
+            $values = $this->filter($filter);
+            
             if($this->where == NULL)
                 throw new UnsafeUpdateException('We are stopping you from accidentally updating every row in your table. If you really wanted to update every row, then call where(Update::ENTIRE_TABLE)');
             
             $sql = 'UPDATE `'.$this->table->name().'` SET ';
             $imp = array();
             
-            foreach($this->values as $name => $value)
+            foreach($values as $name => $value)
                 $imp[] = '`'.$name.'` = '.$value;
             
             $sql .= implode(',',$imp);

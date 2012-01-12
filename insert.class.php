@@ -7,19 +7,12 @@
         private $conn;
         private $table;
         private $values;
-        private $filter;
 
         public function __construct(Connection $conn)
         {
             $this->conn   = $conn;
             $this->table  = NULL;
             $this->values = array();
-            $this->filter = NULL;
-        }
-        
-        public function usedFilter()
-        {
-            return $this->filter;
         }
         
         public function __call($name,$args)
@@ -45,18 +38,24 @@
         * Filter the last set of values that were added for insertion using mysql_real_escape_string
         * by default or optionally a closure
         */
-        public function filter(Closure $filter = NULL)
+        private function filter(Closure $filter = NULL)
         {
-            $last_values = &$this->values[count($this->values) - 1];
-            
-            foreach($this->table->allFields() as $f)
+            $ret = array();
+
+            foreach($this->values as $cur_values)
             {
-                if(isset($last_values[$f['Field']]))
-                    $last_values[$f['Field']] = $this->filterValueForField($f,$last_values[$f['Field']],$filter);
+                $cur_array = array();
+                
+                foreach($this->table->allFields() as $f)
+                {
+                    if(isset($cur_values[$f['Field']]))
+                        $cur_array[$f['Field']] = $this->filterValueForField($f,$cur_values[$f['Field']],$filter);
+                }
+                
+                $ret[] = $cur_array;
             }
             
-            $this->filter = $filter;
-            return $this;
+            return $ret;
         }
         
         public function filterValueForField($f,$value,Closure $filter = NULL)
@@ -70,28 +69,29 @@
             return $value;
         }
         
-        public function insert()
+        public function insert(Closure $filter = NULL)
         {
-            return $this->conn->query($this->insertSql());
+            return $this->conn->query($this->insertSql($filter));
         }
 
-        public function insertSql()
+        public function insertSql(Closure $filter = NULL)
         {
-            return 'INSERT '.$this->baseSql();
+            return 'INSERT '.$this->baseSql($filter);
         }
 
-        public function replace()
+        public function replace(Closure $filter = NULL)
         {
-            return $this->conn->query($this->replaceSql());
+            return $this->conn->query($this->replaceSql($filter));
         }
 
-        public function replaceSql()
+        public function replaceSql(Closure $filter = NULL)
         {
-            return 'REPLACE '.$this->baseSql();
+            return 'REPLACE '.$this->baseSql($filter);
         }
         
-        private function baseSql()
+        private function baseSql(Closure $filter = NULL)
         {
+            $values = $this->filter($filter);
             $all_fields = $this->table->allFields();
             $indexed    = array();
 
@@ -115,13 +115,13 @@
                 }
                 
                 return $cur_array;
-            },$this->values);
+            },$values);
 
             $used_fields = array_keys($used_fields);
             $unused = array_diff($field_names,$used_fields);
             $obj = $this;
 
-            $final_values = array_map(function($element) use($field_names,$unused,$indexed,$obj)
+            $final_values = array_map(function($element) use($field_names,$unused,$indexed,$obj,$filter)
             {
                 foreach($unused as $rem)
                     unset($element[array_search($rem,$field_names)]);
@@ -131,7 +131,7 @@
                     if($value === NULL)
                     {
                         $f = $indexed[$field_names[$index]];
-                        $element[$index] = $obj->filterValueForField($f,$f['Default'],$obj->usedFilter());
+                        $element[$index] = $obj->filterValueForField($f,$f['Default'],$filter);
                     }
                 }
                    

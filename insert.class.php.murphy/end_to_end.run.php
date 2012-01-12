@@ -14,7 +14,7 @@
         $names = array('Iain\'s','Another name');
         
         foreach($names as $name)
-            $stmt->weak_guy(array('strong_guy_id' => $for_strong_guy,'weak_name' => $name))->filter();
+            $stmt->weak_guy(array('strong_guy_id' => $for_strong_guy,'weak_name' => $name));
         
         $stmt->insert();
         $expected = array('1:1:Iain\'s',
@@ -34,8 +34,8 @@
         $one = array('weak_name' => 'Only the name','french_guy_id' => 10);
         $two = array('strong_guy_id' => 1,'weak_name' => 'With strong id');
         $ins = Plusql::into('live');
-        $ins->weak_guy($one)->filter();
-        $ins->weak_guy($two)->filter();
+        $ins->weak_guy($one);
+        $ins->weak_guy($two);
         $ins->insert();
         $expected = array('0:1:Only the name:10',
                           '1:1:With strong id:0');
@@ -54,7 +54,7 @@
         Plusql::into('live')->weak_guy(array('strong_guy_id' => 1,
                                              'weak_name'     => 'Ron Weakly'))
         //DEFAULTS TO mysql_real_escape_string OR mysqli_real_escape_string AS REQUIRED
-        ->filter()->insert();
+        ->insert();
         
         if(Plusql::from('live')->weak_guy->select('strong_guy_id,weak_guy_id,weak_name')->run()->weak_guy->weak_name != 'Ron Weakly')
             $runner->fail('Did not get expected value back after single insert');
@@ -65,7 +65,7 @@
         Plusql::into('live')->weak_guy(array('strong_guy_id' => 1,
                                              'weak_name'     => 'Ron Weakly'))
         //CAN ALSO FILTER WITH A CUSTOM FUNCTION
-        ->filter(function($link,$field,$value)
+        ->insert(function($link,$field,$value)
         {
             if($link instanceof mysqli)
                 $ret = $link->escape_string($value);
@@ -76,7 +76,7 @@
                 $ret = '\''.$ret.'\'';
 
             return $ret;
-        })->insert();
+        });
 
         if(Plusql::from('live')->weak_guy->select('strong_guy_id,weak_guy_id,weak_name')->run()->weak_guy->weak_name != 'Ron Weakly')
             $runner->fail('Did not get expected value back after single insert with custom filter');

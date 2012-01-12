@@ -61,7 +61,7 @@
             foreach($field_names as $fn)
                 $cur_array[$fn] = $sv;
             
-            $sql = $ins->type_test($cur_array)->filter()->insertSql();
+            $sql = $ins->type_test($cur_array)->insertSql();
             //WE SHOULDN'T GET ANY SQL ERRORS - INJECTION FREE
             $conn->query($sql);
             
@@ -76,7 +76,7 @@
 
         try
         {
-            echo 'is: '.$ins->type_test($cur_array)->filter()->insertSql();
+            echo 'is: '.$ins->type_test($cur_array)->insertSql();
             $runner->fail('Why did we not get an exception of type InvalidInsertQueryException?');
         }
         

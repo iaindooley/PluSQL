@@ -35,7 +35,7 @@
             $runner->pass();
         }
         
-        $update->where(Update::ENTIRE_TABLE)->filter()->update();
+        $update->where(Update::ENTIRE_TABLE)->update();
         $sel = new Select($conn);
         $expected = array('This\'s it',
                           'This\'s it');
@@ -62,7 +62,7 @@
         });
         $update = new Update($conn);
         $strong = array('strong_name' => 'This\'s it');
-        $update->strong_guy($strong)->where('strong_name = \'Strong 1\'')->filter()->update();
+        $update->strong_guy($strong)->where('strong_name = \'Strong 1\'')->update();
         
         $expected = array('This\'s it',
                           'Strong 2');
