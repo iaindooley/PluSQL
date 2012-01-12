@@ -105,7 +105,8 @@
         */
         public static function fieldIsOfType($f,$type)
         {
-            return (self::$field_types[strtoupper(preg_replace('/[^A-Za-z]/','',$f['Type']))] === $type);
+            $type = current(explode(' ',$f['Type']));
+            return (self::$field_types[strtoupper(preg_replace('/[^A-Za-z]/','',$type))] === $type);
         }
         
         public static function isDecimal($f)
