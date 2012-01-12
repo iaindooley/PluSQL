@@ -83,6 +83,14 @@
             
             return $ret;
         }
+        
+        public static function dummyFilter()
+        {
+            return function($link,$field,$value)
+            {
+                return $value;
+            };
+        }
     }
 
     class PlusqlConnectionException extends Exception {}
