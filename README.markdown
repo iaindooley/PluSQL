@@ -357,13 +357,11 @@ As with other query types you can do your escaping when building SQL using the `
 
  * come up with a good "mix in" style to cast the objects returned from the iterator
    to a new class for implementing custom functionality (that one would normally include
-   as part of the "boilerplate" class
+   as part of the "boilerplate" class)
 
  * custom ON clause
 
  * custom joining table
-
- * modifiying the various components
 
  * simplfying the process of including all relevant primary keys based on from clause
 
