@@ -83,11 +83,11 @@ What happens is:
 
 2. The values are automatically quoted and escaped. The quotes are added according to the target data types in the database and all values are escaped with mysql/mysqli real_escape_string. This can be changed by passing in an anonymous function to the insert() method that accepts three arguments: 
     
-    * ```php $link```: a link to the database - either a mysql resource or mysqli object depending on what you have installed
+    * ```$link```: a link to the database - either a mysql resource or mysqli object depending on what you have installed
     
-    * ```php $field```: an associative array as loaded from a MySQL DESCRIBE query
+    * ```$field```: an associative array as loaded from a MySQL DESCRIBE query
 
-    * ```php $value```: the value to be escaped
+    * ```$value```: the value to be escaped
 
 You can do multi-value inserts by passing in more than one array of values, and these can be "jagged". Any missing values that are used in one array but not another will just use the default provided by the database:
 
@@ -106,7 +106,6 @@ $ins->table_name($values);
 //the first two records will use the default value for other_field provided in the database
 //the third record will use the default value for constant and name provided in the database
 $ins->insert();
-```
 ```
 
 In order to prevent the default filtering behaviour, eg. if you have already done your escaping and quoting somewhere else, a dummy implementation of the filter is provided:
