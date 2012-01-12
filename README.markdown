@@ -71,7 +71,7 @@ $profile = 'default';
 
 PluSQL intuits your database structure based on primary key names. Let's take the following table structure for example. If we were to give a "textual" description of this system we'd say:
 
-_We have 5 ables: strong_guy, weak_guy, french_guy, rogue_guy and is_rogue. weak_guy depends on strong_guy in a 1 to many dependent relationship. A weak_guy can be a type of french_buy in a 1 to many foreign relationship (foreign, french ... get it?). A weak_guy can be associated with any number of rogue_guys via the is_rogue table._
+_We have 5 tables: strong_guy, weak_guy, french_guy, rogue_guy and is_rogue. weak_guy depends on strong_guy in a 1 to many dependent relationship. A weak_guy can be a type of french_guy in a 1 to many foreign relationship (foreign, french ... get it?). A weak_guy can be associated with any number of rogue_guys via the is_rogue table._
 
 The table structure looks like this:
 
@@ -194,6 +194,25 @@ You can also access fields on joining tables which is useful for storing "date j
 ```php
 echo $rg->is_rogue->strong_guy_id.PHP_EOL;
 ```
+
+If you're building a query where you need to join many tables to one table, for example our weak_guy is joined to both french_guy and rogue_guy, you pass the name of the table you wish to join to again as an argument:
+
+```php
+Plusql::from($profile)->strong_guy
+                      ->weak_guy
+                      //this will return the weak_guy table so we can join rogue_guy to it
+                      ->french_guy('weak_guy')
+                      ->rogue_guy
+```
+
+You can also do LEFT JOINS and it will automatically add an OR (primary_key IS NULL) to your ON clause:
+
+```php
+Plusql::from($profile)->strong_guy
+                      ->weak_guy->joinType(Table::LEFT_JOIN)
+```
+
+You cannot currently do custom ON clauses.
 
 ### Create and Replace
 
