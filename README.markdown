@@ -310,7 +310,9 @@ Just as with the insert/replace queries, the ```update()``` method accepts an an
 
 ```php
 $f = Plusql::escape($profile);
-Plusql::on($profile)->table_name($_POST)->where('field_name = \''.$f($_GET['value']).'\'')->update(Plusql::dummyFilter());
+Plusql::on($profile)->table_name($_POST)
+                    ->where('field_name = \''.$f($_GET['value']).'\'')
+                    ->update(Plusql::dummyFilter());
 ```
 
 If you don't call where() then you will get an Exception of type ```UnsafeUpdateException```. If you really want to update an entire table, use:
