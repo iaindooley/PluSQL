@@ -58,7 +58,7 @@ Plusql::credentials('connection name 2',$config);
 
 These connection names are then used to connect as required. Note that the credentials() method does not open a connection to the database so it's safe to set all your credentials up at the start of each script execution without worrying about unecesesarily connecting to a bunch of databases.
 
-## Basic usage: C.R.U.D
+## Basic Usage 
 
 Each time you do something with Plusql you use one of your configured database credential profiles. In the examples below I'll just use a variable called ```$profile```. So for the examples below, we would have done this in order to setup a connection::
 
@@ -67,9 +67,137 @@ $config = array('localhost','username','password','database');
 Plusql::credentials('default',$config);
 $profile = 'default';
 ```
+### Retrieving and iterating over data
+
+PluSQL intuits your database structure based on primary key names. Let's take the following table structure for example. If we were to give a "textual" description of this system we'd say:
+
+```
+We have 5 ables: strong_guy, weak_guy, french_guy, rogue_guy and is_rogue. weak_guy depends on strong_guy in a 1 to many dependent relationship. A weak_guy can be a type of french_buy in a 1 to many foreign relationship (foreign, french ... get it?). A weak_guy can be associated with any number of rogue_guys via the is_rogue table.
+```
+
+The table structure looks like this:
+
+```mysql
+TABLE: strong_guy;
++---------------+-------------+------+-----+---------+----------------+
+| Field         | Type        | Null | Key | Default | Extra          |
++---------------+-------------+------+-----+---------+----------------+
+| strong_guy_id | int(10)     | NO   | PRI | NULL    | auto_increment |
+| strong_name   | varchar(20) | YES  |     | NULL    |                |
++---------------+-------------+------+-----+---------+----------------+
+
+TABLE: weak_guy;
++---------------+-------------+------+-----+---------+----------------+
+| Field         | Type        | Null | Key | Default | Extra          |
++---------------+-------------+------+-----+---------+----------------+
+| strong_guy_id | int(10)     | NO   | PRI | 0       |                |
+| weak_guy_id   | int(10)     | NO   | PRI | NULL    | auto_increment |
+| weak_name     | varchar(20) | YES  |     | NULL    |                |
+| french_guy_id | int(10)     | NO   |     | 0       |                |
++---------------+-------------+------+-----+---------+----------------+
+
+TABLE: french_guy;
++---------------+-------------+------+-----+---------+----------------+
+| Field         | Type        | Null | Key | Default | Extra          |
++---------------+-------------+------+-----+---------+----------------+
+| french_guy_id | int(10)     | NO   | PRI | NULL    | auto_increment |
+| french_name   | varchar(20) | YES  |     | NULL    |                |
++---------------+-------------+------+-----+---------+----------------+
+
+TABLE: rogue_guy;
++--------------+-------------+------+-----+---------+----------------+
+| Field        | Type        | Null | Key | Default | Extra          |
++--------------+-------------+------+-----+---------+----------------+
+| rogue_guy_id | int(10)     | NO   | PRI | NULL    | auto_increment |
+| rogue_name   | varchar(20) | YES  |     | NULL    |                |
++--------------+-------------+------+-----+---------+----------------+
+
+TABLE: is_rogue
++---------------+---------+------+-----+---------+-------+
+| Field         | Type    | Null | Key | Default | Extra |
++---------------+---------+------+-----+---------+-------+
+| strong_guy_id | int(10) | NO   | PRI | 0       |       |
+| weak_guy_id   | int(10) | NO   | PRI | 0       |       |
+| rogue_guy_id  | int(10) | NO   | PRI | 0       |       |
++---------------+---------+------+-----+---------+-------+
+```
+
+So because of the way the primary keys on each table are named, PluSQL can tell how these all relate to each other. Let's look at some sample queries against the above structure.
+
+PluSQL also provides an ```escape()``` method which gives you back an anonymous function which will escape using either mysql/mysqli_real_escape_string:
+
+```php
+//get an escape function
+$f = Plusql::escape($profile);
+
+echo Plusql::from($profile)->strong_guy
+                           ->weak_guy->select('strong_guy_id,weak_guy_id,strong_name,weak_name')
+                           ->where('strong_guy_id = '.$f($_GET['something']))
+                          ->orderBy('strong_guy_id,weak_guy_id);
+```
+
+As you can see, you are responsible for your SELECT clauses, WHERE clauses, etc. but PluSQL dramatically reduces the task of writing joins.
+
+Although there is some stuff we can do in future releases to _simplify_ this for _common use cases_, the goal is not to abstract away or prevent you from having to write SQL, just to make it more maintanable and productive.
+
+This also automatically works for many-to-many relationships, so above we have the weak_guy and rogue_guy joined via is_rogue:
+
+```php
+echo Plusql::from($profile)->weak_guy->rogue_guy->select('*');
+```
+
+This is useful because if you started off, for example, with weak_guy and rogue_guy being one to many, you could change to a many-to-many relationshp in future without having to change your SQL.
+
+Note that you can just echo the query and the ```__toString()``` method will build the query. You can also run it:
+
+```php
+Plusql::from($profile)->weak_guy->rogue_guy->select('*')->run();
+```
+
+You can access a single object/row without iterating:
+
+```php
+echo Plusql::from($profile)->weak_guy->rogue_guy->select('*')->run()->weak_guy->rogue_guy->rogue_name.PHP_EOL;
+```
+
+or you can iterate over the results, and you can nest your iterations:
+
+```php
+foreach(Plusql::from($profile)->weak_guy->rogue_guy->select('*')->run()->weak_guy as $wg)
+    foreach($wg->rogue_guy as $rg)
+        echo $wg->weak_name.':'.$rg->rogue_name.PHP_EOL;
+```
+
+If you need to cumulatively build a query, you can update any part of the clause, and you can traverse relationships without iterating:
+
+```php
+$query = Plusql::from($profile)->strong_guy->weak_guy;
+//later ...
+$query->rogue_guy->select('strong_guy_id,weak_guy_id,rogue_guy_id,rogue_name');
+//later still ...
+$sel = $query->select();
+$sel->select($sel.',weak_name')->where('strong_guy_id = 1');
+//later STILL ...
+$where = $sel->where();
+
+foreach($sel->where('('.$where.') AND rogue_guy_id = 1')->run()->strong_guy as $sg)
+{
+    //TRAVERSE WITHOUT ITERATING
+    echo $sg->weak_guy->weak_name.':'.$sg->weak_guy->rogue_guy->rogue_name.PHP_EOL;
+    
+    //NOW ITERATE
+    foreach($sg->weak_guy->rogue_guy as $rg)
+        echo $rg->rogue_name.PHP_EOL;
+}
+```
+
+You can also access fields on joining tables which is useful for storing "date joined" or similar, for example that last line above could be:
+
+```php
+echo $rg->is_rogue->strong_guy_id.PHP_EOL;
+```
 
 ### Create and Replace
-
 
 To insert from a form $_POST:
 
@@ -138,9 +266,65 @@ $ins->insert();
 $ins->replace();
 ```
 
+### Update
+
+The primary difference here is the method you use to start a query which is ```on()``` instead of ```into()```. In addition to that, you need to call ```where()``` to specify which rows to update. Although the field values are escaped the same way as for an insert/replace query, you need to manually quote/escape your where clause, but this can be done by obtaining a default escape function from Plusql:
+
+```php
+//grab the appropriate escape function - either mysql or mysqli depending on what is installed
+$f = Plusql::escape($profile);
+
+//now update table_name with the data from $_POST where field_name is a value from GET. Note I have
+//manually quoted the value, but I'm using the anonymous function returned from Plusql::escape() to 
+//escape the value
+Plusql::on($profile)->table_name($_POST)->where('field_name = \''.$f($_GET['value']).'\'')->update();
+```
+
+Just as with the insert/replace queries, the ```update()``` method accepts an anonymous function that can be used to filter the data input array:
+
+```php
+$f = Plusql::escape($profile);
+Plusql::on($profile)->table_name($_POST)->where('field_name = \''.$f($_GET['value']).'\'')->update(Plusql::dummyFilter());
+```
+
+If you don't call where() then you will get an Exception of type ```UnsafeUpdateException```. If you really want to update an entire table, use:
+
+```php
+Plusql::on($profile)->table_name($values)->where(Update::ENTIRE_TABLE)->update();
+```
+
+### Delete and other "raw" queries
+
+You can pass any SQL you like into PluSQL using the ```against()``` and ```run()``` methods, and this is how delete queries are handled:
+
+```php
+$f = Plusql::escape($profile);
+Plusql::against($profile)->run($sql);
+```
+
+This will return the same type of query object that a normal select does, and you can iterate over the result sets in two ways.
+
+Firstly, you can iterate over the result set in a "raw" fashion, just getting each row as you go - basically the same as doing ```mysql_fetch_assoc()``` or similar:
+
+```php
+$query = Plusql::against($profile)->run($sql);
+
+while($row = $query->nextRow())
+    echo $row['field_name'].PHP_EOL;
+```
+
+Alternatively you can iterate over it using the same object style as you do with a normal select query:
+
+```php
+foreach(Plusql::against($profile)->run($sql)->table_name as $tn)
+    echo $tn->field_name.PHP_EOL;
+```
+
 ## TODO
 
  * make from() against() into() and on() use default database credentials
+
+ * Automated escaping of where clauses for select/update
 
  * come up with a good "mix in" style to cast the objects returned from the iterator
    to a new class for implementing custom functionality (that one would normally include
