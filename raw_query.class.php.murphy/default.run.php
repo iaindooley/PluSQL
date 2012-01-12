@@ -1,6 +1,6 @@
 <?php
     namespace plusql;
-    use EmptySetException;
+    use EmptySetException,Plusql;
 
     \murphy\Test::add(function($runner)
     {
@@ -32,4 +32,27 @@
         {
             $runner->pass();
         }
+    });
+
+    \murphy\Test::add(function($runner)
+    {
+        \murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')->execute();
+        \murphy\Fixture::load(dirname(__FILE__).'/../query_iterator.class.php.murphy/fixture.php')
+        ->execute(function($aliases) use(&$conn)
+        {
+            $aliases = $aliases['plusql'];
+            $host = $aliases[0];
+            $username = $aliases[1];
+            $password = $aliases[2];
+            $dbname = $aliases[3];
+            $conn = new Connection($host,$username,$password,$dbname);
+            $conn->connect();
+        });
+        
+        Plusql::credentials('live',array('localhost','plusql','plusql','plusql'));
+
+        if(Plusql::against('live')->run('SELECT * FROM weak_guy')->weak_guy->weak_name != 'Weaky Weakling')
+            $runner->fail('Unable to get the correct result from a raw query');
+        else
+            $runner->pass();
     });
