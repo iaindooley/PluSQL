@@ -349,6 +349,26 @@ foreach(Plusql::against($profile)->run($sql)->table_name as $tn)
 
 As with other query types you can do your escaping when building SQL using the ```Plusql::escape()``` anonymous function.
 
+## Running the Murphy tests
+
+PluSQL comes with a bunch of tests written using https://github.com/iaindooley/Murphy which is an automated testing framework for https://github.com/iaindooley/RocketSled.
+
+In order to run these tests:
+
+1. Download RocketSled
+
+2. Download Murphy and put the folder in your RocketSled packages directory
+
+3. Download PluSQL and put the folder in your RocketSled packages directory
+
+4. ```cd RocketSled && php index.php Murphy```
+
+This will execute all tests. You can execute a subset by using the include directive:
+
+```php index.php Murphy include="packages/plusql/insert"```
+
+For more information on RocketSled and Murphy, check out the README files in those projects.
+
 ## TODO
 
  * make from() against() into() and on() use default database credentials
