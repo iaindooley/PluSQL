@@ -326,7 +326,6 @@ Plusql::on($profile)->table_name($values)->where(Update::ENTIRE_TABLE)->update()
 You can pass any SQL you like into PluSQL using the ```against()``` and ```run()``` methods, and this is how delete queries are handled:
 
 ```php
-$f = Plusql::escape($profile);
 Plusql::against($profile)->run($sql);
 ```
 
@@ -347,6 +346,8 @@ Alternatively you can iterate over it using the same object style as you do with
 foreach(Plusql::against($profile)->run($sql)->table_name as $tn)
     echo $tn->field_name.PHP_EOL;
 ```
+
+As with other query types you can do your escaping when building SQL using the ```Plusql::escape()``` anonymous function.
 
 ## TODO
 
