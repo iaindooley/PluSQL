@@ -155,13 +155,20 @@ Plusql::from($profile)->weak_guy->rogue_guy->select('*')->run();
 You can access a single object/row without iterating:
 
 ```php
-echo Plusql::from($profile)->weak_guy->rogue_guy->select('*')->run()->weak_guy->rogue_guy->rogue_name.PHP_EOL;
+echo Plusql::from($profile)->weak_guy
+                           ->rogue_guy
+                           ->select('*')
+                           ->run()
+                           ->weak_guy->rogue_guy->rogue_name.PHP_EOL;
 ```
 
 or you can iterate over the results, and you can nest your iterations:
 
 ```php
-foreach(Plusql::from($profile)->weak_guy->rogue_guy->select('*')->run()->weak_guy as $wg)
+foreach(Plusql::from($profile)->weak_guy
+                              ->rogue_guy
+                              ->select('*')
+                              ->run()->weak_guy as $wg)
     foreach($wg->rogue_guy as $rg)
         echo $wg->weak_name.':'.$rg->rogue_name.PHP_EOL;
 ```
@@ -178,10 +185,12 @@ $sel->select($sel.',weak_name')->where('strong_guy_id = 1');
 //later STILL ...
 $where = $sel->where();
 
-foreach($sel->where('('.$where.') AND rogue_guy_id = 1')->run()->strong_guy as $sg)
+foreach($sel->where('('.$where.') AND rogue_guy_id = 1')->run()
+                                                        ->strong_guy as $sg)
 {
     //TRAVERSE WITHOUT ITERATING
-    echo $sg->weak_guy->weak_name.':'.$sg->weak_guy->rogue_guy->rogue_name.PHP_EOL;
+    echo $sg->weak_guy->weak_name.':'.$sg->weak_guy
+                                         ->rogue_guy->rogue_name.PHP_EOL;
     
     //NOW ITERATE
     foreach($sg->weak_guy->rogue_guy as $rg)
