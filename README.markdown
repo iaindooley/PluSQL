@@ -56,13 +56,20 @@ $config = array('localhost','username','password','database2');
 Plusql::credentials('connection name 2',$config);
 ```
 
-These connection names are then used to connect as required. Note that the credentials() method does not open a connection to the database so it's safe to set all your credentials up at the start of each script execution without worry about unecesesarily connecting to a bunch of databases.
+These connection names are then used to connect as required. Note that the credentials() method does not open a connection to the database so it's safe to set all your credentials up at the start of each script execution without worrying about unecesesarily connecting to a bunch of databases.
 
 ## Basic usage: C.R.U.D
 
+Each time you do something with Plusql you use one of your configured database credential profiles. In the examples below I'll just use a variable called ```$profile```. So for the examples below, we would have done this in order to setup a connection::
+
+```php
+$config = array('localhost','username','password','database');
+Plusql::credentials('default',$config);
+$profile = 'default';
+```
+
 ### Create and Replace
 
-Each time you do something with Plusql you use one of your configured database credential profiles. In the examples below I'll just use a variable called ```$profile```.
 
 To insert from a form $_POST:
 
