@@ -26,10 +26,10 @@
         {
             $do_quotes = FALSE;
 
-            if(plusql\Table::fieldRequiresQuotesForValue($f,$value))
+            if(PluSQL\Table::fieldRequiresQuotesForValue($f,$value))
                 $do_quotes = TRUE;
 
-            if(!($value instanceof plusql\SqlFunction))
+            if(!($value instanceof PluSQL\SqlFunction))
             {   
                 if($link instanceof mysqli)
                     $value = $link->escape_string($value);
@@ -38,7 +38,7 @@
             }
             
             if(!$do_quotes)
-                $value = plusql\Table::stripForNumericField($f,$value);
+                $value = PluSQL\Table::stripForNumericField($f,$value);
 
             if($do_quotes)
                 $value = '\''.$value.'\'';

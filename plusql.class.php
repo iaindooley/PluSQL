@@ -42,7 +42,7 @@
             
             if(!isset(self::$instance->connections[$key]))
             {
-                $conn = new plusql\Connection($host,$user,$password,$dbname);
+                $conn = new PluSQL\Connection($host,$user,$password,$dbname);
                 self::$instance->connections[$key] = $conn;
             }
             else
@@ -54,22 +54,22 @@
         
         public static function from($credentials)
         {
-            return new plusql\Select(self::connect($credentials));
+            return new PluSQL\Select(self::connect($credentials));
         }
 
         public static function into($credentials)
         {
-            return new plusql\Insert(self::connect($credentials));
+            return new PluSQL\Insert(self::connect($credentials));
         }
 
         public static function against($credentials)
         {
-            return new plusql\RawQuery(self::connect($credentials));
+            return new PluSQL\RawQuery(self::connect($credentials));
         }
 
         public static function on($credentials)
         {
-            return new plusql\Update(self::connect($credentials));
+            return new PluSQL\Update(self::connect($credentials));
         }
         
         public static function escape($credentials)

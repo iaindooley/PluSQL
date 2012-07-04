@@ -62,7 +62,7 @@
                 $ret = FALSE;
             else if(self::fieldIsOfType($f,self::NUMERIC) && !self::isDecimal($f))
                 $ret = FALSE;
-            
+
             return $ret;
                 
         }
@@ -103,10 +103,10 @@
         /**
         * @param f - an array returned as a part of a DESCRIBE query
         */
-        public static function fieldIsOfType($f,$type)
+        public static function fieldIsOfType($f,$test_type)
         {
             $type = current(explode(' ',$f['Type']));
-            return (self::$field_types[strtoupper(preg_replace('/[^A-Za-z]/','',$type))] === $type);
+            return (self::$field_types[strtoupper(preg_replace('/[^A-Za-z]/','',$type))] === $test_type);
         }
         
         public static function isDecimal($f)

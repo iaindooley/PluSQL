@@ -49,7 +49,7 @@
             else
             {
                 if(!isset($this->tables[$return]))
-                    throw new InvalidReturnSelectorExceptionException('You can\'t ask for '.$return.' in your from clause, because you haven\'t already accessed it');
+                    throw new InvalidReturnSelectorException('You can\'t ask for '.$return.' in your from clause, because you haven\'t already accessed it');
 
                 $this->target = $this->tables[$return];
             }

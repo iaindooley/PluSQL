@@ -88,13 +88,14 @@
             $conn->connect();
         });
         
-        $expected_output = 'Strong 1:Weak 1:Rogue 1:French 1
+        $expected_output = trim('
+Strong 1:Weak 1:Rogue 1:French 1
 Strong 1:Weak 2:Rogue 1:French 1
-Strong 2:Weak 3:Rogue 2:French 2
 Strong 2:Weak 3:Rogue 1:French 2
+Strong 2:Weak 3:Rogue 2:French 2
 Strong 2:Weak 4:Rogue 2:French 2
-';
-        $query = new Query('SELECT * FROM strong_guy INNER JOIN weak_guy USING(strong_guy_id) INNER JOIN is_rogue USING(strong_guy_id,weak_guy_id) INNER JOIN rogue_guy USING (rogue_guy_id) INNER JOIN french_guy USING(french_guy_id) ORDER BY strong_guy_id,weak_guy_id',$conn->link());
+');
+        $query = new Query('SELECT * FROM strong_guy INNER JOIN weak_guy USING(strong_guy_id) INNER JOIN is_rogue USING(strong_guy_id,weak_guy_id) INNER JOIN rogue_guy USING (rogue_guy_id) INNER JOIN french_guy USING(french_guy_id) ORDER BY strong_guy_id,weak_guy_id,rogue_guy_id',$conn->link());
         $iterator = new QueryIterator($query,'strong_guy',0);
 $start = microtime(true);
         ob_start();
@@ -106,8 +107,10 @@ $start = microtime(true);
                     echo $sg->strong_name.':'.$wg->weak_name.':'.$rg->rogue_name.':'.$wg->french_guy->french_name.PHP_EOL;
         }
         
-        if(ob_get_clean() == $expected_output)
+        $actual = trim(ob_get_clean());
+
+        if($actual == $expected_output)
             $runner->pass();
         else
-            $runner->fail('The output was unexpected');
+            $runner->fail('The output was unexpected. We expected: '.$expected_output.' but got: '.$actual);
     });

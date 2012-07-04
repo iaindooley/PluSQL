@@ -8,9 +8,9 @@
     * strong_name | weak_name | rogue_name | french_name
     * Strong 1    | Weak 1   | Rogue 1   | French 1
     * Strong 1    | Weak 2   | Rogue 1   | French 1
+    * Strong 2    | Weak 3   | Rogue 1   | French 2
     * Strong 2    | Weak 3   | Rogue 2   | French 2
     * Strong 2    | Weak 4   | Rogue 2   | French 2
-    * Strong 2    | Weak 3   | Rogue 1   | French 2
     */
     \Murphy\Fixture::add(function($row)
     {

@@ -31,14 +31,14 @@
         $actual = ob_get_clean();
         $expected = 'Array
 (
-    [weak_guy] => plusql\Table Object
+    [weak_guy] => PluSQL\Table Object
         (
-            [name:plusql\Table:private] => weak_guy
-            [join_to:plusql\Table:private] => Array
+            [name:PluSQL\Table:private] => weak_guy
+            [join_to:PluSQL\Table:private] => Array
                 (
                 )
 
-            [join_type:plusql\Table:private] => INNER JOIN
+            [join_type:PluSQL\Table:private] => INNER JOIN
         )
 
 )

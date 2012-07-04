@@ -46,7 +46,7 @@
             $username = $aliases[1];
             $password = $aliases[2];
             $dbname = $aliases[3];
-            $conn = new plusql\Connection($host,$username,$password,$dbname);
+            $conn = new PluSQL\Connection($host,$username,$password,$dbname);
             $conn->connect();
         });
 
