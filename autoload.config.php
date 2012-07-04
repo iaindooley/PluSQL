@@ -7,7 +7,7 @@
     spl_autoload_register(function($class)
     {
         //IF THIS IS A NAMESPACED CLASS AND IT'S PART OF plusql
-        if((strpos($class,'\\') !== FALSE) && (strpos($class,'plusql') === 0))
+        if((strpos($class,'\\') !== FALSE) && (strpos($class,'PluSQL') === 0))
         {
             $split = explode('\\',$class);
             array_shift($split);
