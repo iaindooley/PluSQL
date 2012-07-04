@@ -1,9 +1,9 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
     
-    \murphy\Test::add(function($runner)
+    \Murphy\Test::add(function($runner)
     {
-        \murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')->execute();
+        \Murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')->execute();
         $conn = new Connection('localhost','plusql','plusql','plusql');
         $conn->connect();
         $query = new Query('SELECT * FROM strong_guy',$conn->link());

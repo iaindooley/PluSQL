@@ -1,12 +1,12 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
     use Plusql;
     require(dirname(__FILE__).'/functions.php');
 
     /**
     * Start off by testing building the from clause
     */
-    \murphy\Test::add(function($runner)
+    \Murphy\Test::add(function($runner)
     {
         $conn = getConnection();
         $sel = new Select($conn);
@@ -55,7 +55,7 @@
     * having
     * limit 
     */
-    \murphy\Test::add(function($runner)
+    \Murphy\Test::add(function($runner)
     {
         $conn = getConnection();
         $sel = new Select($conn);
@@ -73,7 +73,7 @@
     /**
     * Test an empty where clause
     */
-    \murphy\Test::add(function($runner)
+    \Murphy\Test::add(function($runner)
     {
         $conn = getConnection();
         $sel = new Select($conn);
@@ -83,7 +83,7 @@
     /**
     * Now just do a bit of an end-to-end test building a big fuckoff query
     */
-    \murphy\Test::add(function($runner)
+    \Murphy\Test::add(function($runner)
     {
         $sel = new Select(getConnection());
         $query = (string)$sel->strong_guy

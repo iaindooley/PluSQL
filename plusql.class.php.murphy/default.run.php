@@ -2,11 +2,11 @@
     /**
     * Test pushing and popping the database connection stack
     */
-    murphy\Test::add(function($runner)
+    Murphy\Test::add(function($runner)
     {
         //run the fixture which will create our databases and populate them
         //with some sample data
-        murphy\Fixture::load(dirname(__FILE__).'/fixture.php')->execute();
+        Murphy\Fixture::load(dirname(__FILE__).'/fixture.php')->execute();
         //connect using live/dev credentials
         Plusql::credentials('live',array('localhost','plusql','plusql','plusql'));
         Plusql::credentials('dev',array('localhost','plusql','plusql','plusql_dev'));
@@ -34,11 +34,11 @@
             $runner->fail('I was unable to switch back to the dev database after switching from dev to live');
     });
 
-    murphy\Test::add(function($runner)
+    Murphy\Test::add(function($runner)
     {
         $conn = NULL;
-        \murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')->execute();
-        \murphy\Fixture::load(dirname(__FILE__).'/../query_iterator.class.php.murphy/fixture.php')
+        \Murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')->execute();
+        \Murphy\Fixture::load(dirname(__FILE__).'/../query_iterator.class.php.murphy/fixture.php')
         ->execute(function($aliases) use(&$conn)
         {   
             $aliases = $aliases['plusql'];

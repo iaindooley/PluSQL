@@ -1,11 +1,11 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
 
     function getConnection()
     {
         $conn = NULL;
-        \murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')->execute();
-        \murphy\Fixture::load(dirname(__FILE__).'/../query_iterator.class.php.murphy/fixture.php')
+        \Murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')->execute();
+        \Murphy\Fixture::load(dirname(__FILE__).'/../query_iterator.class.php.murphy/fixture.php')
         ->execute(function($aliases) use(&$conn)
         {
             $aliases = $aliases['plusql'];
@@ -20,7 +20,7 @@
         return $conn;
     }
     
-    function testProperty(Connection $conn,\murphy\Test $runner,$name,$initial,$additional)
+    function testProperty(Connection $conn,\Murphy\Test $runner,$name,$initial,$additional)
     {
         $sel = new Select($conn);
         $sel->$name($initial);

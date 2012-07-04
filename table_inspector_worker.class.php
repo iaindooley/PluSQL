@@ -1,5 +1,5 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
     use Exception,mysqli,mysqli_result;
 
     class TableInspectorWorker

@@ -1,7 +1,7 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
 
-    \murphy\Test::add(function($runner)
+    \Murphy\Test::add(function($runner)
     {
         $table = new Table('strong_guy');
         

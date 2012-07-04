@@ -1,5 +1,5 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
     use Iterator;
 
     class QueryIterator implements Iterator

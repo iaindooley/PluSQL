@@ -3,7 +3,7 @@
     * dbname
     * plusql
     */
-    murphy\Fixture::add(function($row)
+    Murphy\Fixture::add(function($row)
     {
         if(!$mysql_root = Args::get('mysql_root',Args::argv))
             die('You need to pass in mysql_root');

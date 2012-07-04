@@ -1,5 +1,5 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
     use EmptySetException,Exception,mysqli;
 
     class Query

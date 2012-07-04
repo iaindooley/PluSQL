@@ -1,9 +1,9 @@
 <?php
-    rocketpack\Install::package('PluSQL',array(0,1,0));
+    RocketPack\Install::package('https://github.com/iaindooley/PluSQL',array(0,2,0));
     
-    rocketpack\Dependencies::register(function()
+    RocketPack\Dependencies::register(function()
     {
-        rocketpack\Dependency::forPackage('PluSQL')
-        ->add('Murphy',array(0,1,0))
+        rocketpack\Dependency::forPackage('https://github.com/iaindooley/PluSQL')
+        ->add('https://github.com/iaindooley/Murphy',array(0,2,0))
         ->verify();
     });

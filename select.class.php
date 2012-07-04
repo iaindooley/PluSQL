@@ -1,5 +1,5 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
     use Exception,Bind;
 
     class Select

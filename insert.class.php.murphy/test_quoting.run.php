@@ -1,11 +1,11 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
     use Plusql,mysqli;
 
     /**
     * Testing the quoting behaviour and default values
     */
-    \murphy\Test::add(function($runner)
+    \Murphy\Test::add(function($runner)
     {
         $sample_values = array(3,
                                3.5,
@@ -51,7 +51,7 @@
         foreach($sample_values as $index => $sv)
         {
             $expected_query = $sample_queries[$index];
-            \murphy\Fixture::load(dirname(__FILE__).'/fixture.php')->execute();
+            \Murphy\Fixture::load(dirname(__FILE__).'/fixture.php')->execute();
             $to = 'plusql';
             $conn = new Connection('localhost',$to,$to,$to);
             $conn->connect();

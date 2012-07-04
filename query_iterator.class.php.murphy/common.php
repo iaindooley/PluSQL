@@ -1,5 +1,5 @@
 <?php
-    namespace plusql\fixture\query_iterator;
+    namespace PluSQL\fixture\query_iterator;
 
     function createOrRetrieveGuy($table,$keys,$name_field,$name,$insert_keys = NULL)
     {

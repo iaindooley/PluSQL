@@ -1,12 +1,12 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
     use Plusql;
     require(dirname(__FILE__).'/functions.php');
 
     /**
     * Test if we can do a left join
     */
-    \murphy\Test::add(function($runner)
+    \Murphy\Test::add(function($runner)
     {
         $sel   = new Select(getConnection());
         $query = (string)$sel->strong_guy

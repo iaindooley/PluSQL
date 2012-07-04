@@ -1,13 +1,13 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
     /**
     * Test accessing fields and related tables, both existing and non-existant
     */
-    \murphy\Test::add(function($runner)
+    \Murphy\Test::add(function($runner)
     {
         $conn = NULL;
-        \murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')->execute();
-        \murphy\Fixture::load(dirname(__FILE__).'/../query_iterator.class.php.murphy/fixture.php')
+        \Murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')->execute();
+        \Murphy\Fixture::load(dirname(__FILE__).'/../query_iterator.class.php.murphy/fixture.php')
         ->execute(function($aliases) use(&$conn)
         {
             $deets = $aliases['plusql'];

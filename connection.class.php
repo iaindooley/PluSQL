@@ -1,5 +1,5 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
     use mysqli,Plusql;
 
     class Connection

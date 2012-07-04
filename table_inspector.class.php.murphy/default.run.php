@@ -1,13 +1,13 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
     
     /**
     * Test that the same table object is returned when called for the same table
     */
-    \murphy\Test::add(function($runner)
+    \Murphy\Test::add(function($runner)
     {
         $conn = NULL;
-        \murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')
+        \Murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')
         ->also(dirname(__FILE__).'/../query_iterator.class.php.murphy/fixture.php')
         ->execute(function($aliases) use(&$conn)
         {
@@ -32,9 +32,9 @@
     /**
     * Test that a different able is returned for the same name with different database links
     */
-    \murphy\Test::add(function($runner)
+    \Murphy\Test::add(function($runner)
     {
-        \murphy\Fixture::load(dirname(__FILE__).'/fixture.php')->execute();
+        \Murphy\Fixture::load(dirname(__FILE__).'/fixture.php')->execute();
         $conn1 = new Connection('localhost','plusql_one','plusql_one','plusql_one');
         $conn2 = new Connection('localhost','plusql_two','plusql_two','plusql_two');
         $one = TableInspector::forTable('strong_guy',$conn1->link());

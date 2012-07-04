@@ -1,5 +1,5 @@
 <?php
-    namespace plusql\fixture\query_iterator;
+    namespace PluSQL\fixture\query_iterator;
     require_once(dirname(__FILE__).'/common.php');
 
     /**
@@ -12,7 +12,7 @@
     * Strong 2    | Weak 4   | Rogue 2   | French 2
     * Strong 2    | Weak 3   | Rogue 1   | French 2
     */
-    \murphy\Fixture::add(function($row)
+    \Murphy\Fixture::add(function($row)
     {
         $strong_guy_id = createOrRetrieveGuy('strong_guy',array('strong_guy_id'),'strong_name',$row['strong_name']);
         $weak_guy_id   = createOrRetrieveGuy('weak_guy',array('strong_guy_id','weak_guy_id'),'weak_name',$row['weak_name'],array('strong_guy_id' => $strong_guy_id));

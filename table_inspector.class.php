@@ -1,5 +1,5 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
 
     class TableInspector
     {

@@ -1,5 +1,5 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
     use Exception,Closure,mysqli,Bind;
     
     class Insert

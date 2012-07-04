@@ -1,5 +1,5 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
 
     /**
     * This file provides a default autoload implementation for those not using https://github.com/iaindooley/RocketSled

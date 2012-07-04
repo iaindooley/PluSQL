@@ -1,13 +1,13 @@
 <?php
-    namespace plusql;
+    namespace PluSQL;
     use Plusql,mysqli;
 
     /**
     * Testing the basic insert query building
     */
-    \murphy\Test::add(function($runner)
+    \Murphy\Test::add(function($runner)
     {
-        \murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')->execute();
+        \Murphy\Fixture::load(dirname(__FILE__).'/../on_clause.class.php.murphy/fixture.php')->execute();
         $to = 'plusql';
         $conn = new Connection('localhost',$to,$to,$to);
         $conn->connect();
