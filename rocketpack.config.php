@@ -1,5 +1,5 @@
 <?php
-    RocketPack\Install::package('https://github.com/iaindooley/PluSQL',array(0,2,1));
+    RocketPack\Install::package('https://github.com/iaindooley/PluSQL',array(0,2,0));
     
     RocketPack\Dependencies::register(function()
     {
