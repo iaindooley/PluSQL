@@ -3,7 +3,7 @@
     
     RocketPack\Dependencies::register(function()
     {
-        rocketpack\Dependency::forPackage('https://github.com/iaindooley/PluSQL')
+        RocketPack\Dependency::forPackage('https://github.com/iaindooley/PluSQL')
         ->add('https://github.com/iaindooley/Murphy',array(0,2,0))
         ->verify();
     });
