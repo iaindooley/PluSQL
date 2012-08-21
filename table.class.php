@@ -106,6 +106,7 @@
         public static function fieldIsOfType($f,$test_type)
         {
             $type = current(explode(' ',$f['Type']));
+            $type = current(explode('(',$type));
             return (self::$field_types[strtoupper(preg_replace('/[^A-Za-z]/','',$type))] === $test_type);
         }
         
