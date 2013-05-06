@@ -25,13 +25,16 @@
         public function connect()
         {
             if($this->link instanceof mysqli)
-                //$this->link->select_db($this->credentials[Plusql::NAME]) or die($this->link->error);
+            {
                 if(!$this->link->select_db($this->credentials[Plusql::NAME]))
                     throw new Exception($this->link->error);
+            }
+
             else
-                //mysql_select_db($this->credentials[Plusql::NAME],$this->link) or throw new Exception(mysql_error());
+            {
                 if(!mysql_select_db($this->credentials[Plusql::NAME],$this->link))
                     throw new Exception(mysql_error());
+            }
         }
 
         public function escape($value)

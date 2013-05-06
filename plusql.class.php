@@ -3,10 +3,11 @@
     {
         private static $instance = NULL;
         private $connections;
-        const HOST = 0;
-        const USER = 1;
-        const PASS = 2;
-        const NAME = 3;
+        const HOST             = 0;
+        const USER             = 1;
+        const PASS             = 2;
+        const NAME             = 3;
+        const ALLOW_MISSING_DB = 4;
         private $credentials;
 
         private function __construct()
@@ -26,7 +27,7 @@
             self::$instance->credentials[$name] = $details;
         }
 
-        public static function connect($credentials)
+        public static function connect($credentials,$allow_missing_db = NULL)
         {
             if(self::$instance === NULL)
                 self::$instance = new Plusql();
@@ -48,7 +49,17 @@
             else
                 $conn = self::$instance->connections[$key];
             
-            $conn->connect();
+            try
+            {
+                $conn->connect();
+            }
+
+            catch(Exception $exc)
+            {
+                if($allow_missing_db != self::ALLOW_MISSING_DB)
+                    throw $exc;
+            }
+
             return $conn;
         }
         
@@ -64,7 +75,7 @@
 
         public static function against($credentials)
         {
-            return new PluSQL\RawQuery(self::connect($credentials));
+            return new PluSQL\RawQuery(self::connect($credentials,self::ALLOW_MISSING_DB));
         }
 
         public static function on($credentials)
