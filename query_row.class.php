@@ -20,6 +20,11 @@
                 throw new InvalidQueryRowException('You have tried to create a QueryRow object with an empty data set for: '.$table);
         }
         
+        public function rowData()
+        {
+            return $this->query->rowAtIndex($this->index);
+        }
+        
         public function keySignature()
         {
             $keys = $this->table_inspector->primaryKeys();
