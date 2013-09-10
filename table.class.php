@@ -74,10 +74,10 @@
             $field_type = preg_replace('/[^A-Za-z]/','',$f['Type']);
                 
             if(stripos($field_type,'int') !== FALSE)
-                $ret = preg_replace('/[^0-9]/','',floor($value));
+                $ret = preg_replace('/[^0-9-]/','',floor($value));
             else if((stripos($field_type,'float') !== FALSE) ||
                     (stripos($field_type,'double') !== FALSE))
-                $ret = self::stripPoints(preg_replace('/[^0-9.]/','',$value));
+                $ret = self::stripPoints(preg_replace('/[^0-9.-]/','',$value));
 
             return $ret;
         }
