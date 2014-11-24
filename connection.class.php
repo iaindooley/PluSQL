@@ -10,7 +10,7 @@
         public function __construct($host,$user,$password,$dbname)
         {
             $this->credentials = func_get_args();
-            $this->establishConnection($host,$user,$password,$dbname)
+            $this->establishConnection($host,$user,$password,$dbname);
         }
         
         private function establishConnection($host,$user,$password,$dbname)
