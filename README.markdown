@@ -88,8 +88,8 @@ TABLE: weak_guy;
 +---------------+-------------+------+-----+---------+----------------+
 | Field         | Type        | Null | Key | Default | Extra          |
 +---------------+-------------+------+-----+---------+----------------+
-| strong_guy_id | int(10)     | NO   | PRI |         |                |
-| weak_guy_id   | int(10)     | NO   | PRI |         |                |
+| strong_guy_id | int(10)     | NO   |     | 0       |                |
+| weak_guy_id   | int(10)     | NO   | PRI |         | auto_increment |
 | weak_name     | varchar(20) | YES  |     | NULL    |                |
 | french_guy_id | int(10)     | NO   |     | 0       |                |
 +---------------+-------------+------+-----+---------+----------------+
