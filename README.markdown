@@ -388,3 +388,5 @@ For more information on RocketSled and Murphy, check out the README files in tho
  * simplfying the default order clause by primary keys to create contiguous blocks
 
  * pagination (including for joined queries)
+
+ * Update the query builder to use USING instead of ON, so that you don't need to prefix each key field in FROM, WHERE and ORDER clauses with the table name to avoid ambiguity. See: https://github.com/iaindooley/PluSQL/issues/3
