@@ -73,7 +73,7 @@ PluSQL intuits your database structure based on primary key names. Let's take th
 
 _We have 5 tables: strong_guy, weak_guy, french_guy, rogue_guy and is_rogue. weak_guy depends on strong_guy in a 1 to many dependent relationship. A weak_guy can be a type of french_guy in a 1 to many foreign relationship (foreign, french ... get it?). A weak_guy can be associated with any number of rogue_guys via the is_rogue table._
 
-The table structure looks like this:
+The table structure looks like this (note that if you're using InnoDB you will need to put UNIQUE after auto_increment when using a composite primary key):
 
 ```mysql
 TABLE: strong_guy;
