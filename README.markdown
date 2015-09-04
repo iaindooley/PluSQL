@@ -129,9 +129,9 @@ PluSQL also provides an ```escape()``` method which gives you back an anonymous 
 $f = Plusql::escape($profile);
 
 echo Plusql::from($profile)->strong_guy
-                           ->weak_guy->select('strong_guy_id,weak_guy_id,strong_name,weak_name')
-                           ->where('strong_guy_id = '.$f($_GET['something']))
-                          ->orderBy('strong_guy_id,weak_guy_id);
+                           ->weak_guy->select('strong_guy.strong_guy_id,weak_guy_id,strong_name,weak_name')
+                           ->where('strong_guy.strong_guy_id = '.$f($_GET['something']))
+                          ->orderBy('strong_guy.strong_guy_id,weak_guy_id);
 ```
 
 As you can see, you are responsible for your SELECT clauses, WHERE clauses, etc. but PluSQL dramatically reduces the task of writing joins.
