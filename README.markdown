@@ -88,8 +88,8 @@ TABLE: weak_guy;
 +---------------+-------------+------+-----+---------+----------------+
 | Field         | Type        | Null | Key | Default | Extra          |
 +---------------+-------------+------+-----+---------+----------------+
-| strong_guy_id | int(10)     | NO   | PRI | 0       |                |
-| weak_guy_id   | int(10)     | NO   | PRI | NULL    | auto_increment |
+| strong_guy_id | int(10)     | NO   | PRI |         |                |
+| weak_guy_id   | int(10)     | NO   | PRI |         | auto_increment |
 | weak_name     | varchar(20) | YES  |     | NULL    |                |
 | french_guy_id | int(10)     | NO   |     | 0       |                |
 +---------------+-------------+------+-----+---------+----------------+
@@ -98,7 +98,7 @@ TABLE: french_guy;
 +---------------+-------------+------+-----+---------+----------------+
 | Field         | Type        | Null | Key | Default | Extra          |
 +---------------+-------------+------+-----+---------+----------------+
-| french_guy_id | int(10)     | NO   | PRI | NULL    | auto_increment |
+| french_guy_id | int(10)     | NO   | PRI |         | auto_increment |
 | french_name   | varchar(20) | YES  |     | NULL    |                |
 +---------------+-------------+------+-----+---------+----------------+
 
@@ -106,7 +106,7 @@ TABLE: rogue_guy;
 +--------------+-------------+------+-----+---------+----------------+
 | Field        | Type        | Null | Key | Default | Extra          |
 +--------------+-------------+------+-----+---------+----------------+
-| rogue_guy_id | int(10)     | NO   | PRI | NULL    | auto_increment |
+| rogue_guy_id | int(10)     | NO   | PRI |         | auto_increment |
 | rogue_name   | varchar(20) | YES  |     | NULL    |                |
 +--------------+-------------+------+-----+---------+----------------+
 
@@ -114,9 +114,9 @@ TABLE: is_rogue
 +---------------+---------+------+-----+---------+-------+
 | Field         | Type    | Null | Key | Default | Extra |
 +---------------+---------+------+-----+---------+-------+
-| strong_guy_id | int(10) | NO   | PRI | 0       |       |
-| weak_guy_id   | int(10) | NO   | PRI | 0       |       |
-| rogue_guy_id  | int(10) | NO   | PRI | 0       |       |
+| strong_guy_id | int(10) | NO   | PRI |         |       |
+| weak_guy_id   | int(10) | NO   | PRI |         |       |
+| rogue_guy_id  | int(10) | NO   | PRI |         |       |
 +---------------+---------+------+-----+---------+-------+
 ```
 
@@ -129,9 +129,10 @@ PluSQL also provides an ```escape()``` method which gives you back an anonymous 
 $f = Plusql::escape($profile);
 
 echo Plusql::from($profile)->strong_guy
-                           ->weak_guy->select('strong_guy.strong_guy_id,weak_guy_id,strong_name,weak_name')
+                           ->weak_guy
+                           ->select('strong_guy.strong_guy_id,weak_guy_id,strong_name,weak_name')
                            ->where('strong_guy.strong_guy_id = '.$f($_GET['something']))
-                          ->orderBy('strong_guy.strong_guy_id,weak_guy_id);
+                           ->orderBy('strong_guy.strong_guy_id,weak_guy_id);
 ```
 
 As you can see, you are responsible for your SELECT clauses, WHERE clauses, etc. but PluSQL dramatically reduces the task of writing joins.
